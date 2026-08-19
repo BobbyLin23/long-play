@@ -1,0 +1,3 @@
+{
+  "extends": "@long-play/config/tsconfig.base.json"
+}
