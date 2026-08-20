@@ -1,0 +1,102 @@
+{
+  "format_on_save": "on",
+  "language_servers": ["!eslint", "!oxlint", "!oxfmt", "..."],
+  "hard_tabs": true,
+  "tab_size": 2,
+  "lsp": {
+    "biome": {
+      "settings": {
+        // Only run Biome in projects that actually have a biome.json.
+        "require_config_file": true
+      }
+    },
+    "svelte-language-server": {
+      "initialization_options": {
+        "configuration": {
+          "svelte": {
+            "plugin": {
+              "svelte": {
+                "format": {
+                  "config": {
+                    "useTabs": true,
+                    "svelteSortOrder": "options-scripts-markup-styles"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "languages": {
+    "JavaScript": {
+      "format_on_save": "on",
+      "formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true
+      }
+    },
+    "TypeScript": {
+      "format_on_save": "on",
+      "formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true
+      }
+    },
+    "TSX": {
+      "format_on_save": "on",
+      "formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true
+      }
+    },
+    "JSON": {
+      "format_on_save": "on",
+      "formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+        "source.fixAll.biome": true
+      }
+    },
+    "JSONC": {
+      "format_on_save": "on",
+      "formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+        "source.fixAll.biome": true
+      }
+    },
+    "CSS": {
+      "format_on_save": "on",
+      "formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+        "source.fixAll.biome": true
+      }
+    },
+    // --- Languages Biome does not (fully) support -------------------------
+    // Biome's Svelte support is experimental and its formatter is off unless
+    // html.experimentalFullSupportEnabled is enabled in biome.json, so
+    // svelte-language-server (prettier + prettier-plugin-svelte) formats the
+    // whole file. Biome stays attached for lint diagnostics in <script> blocks.
+    "Svelte": {
+    	"format_on_save": "on",
+     	"formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+      	"source.fixAll.biome": true,
+      }
+    },
+    "HTML": {
+      "format_on_save": "on"
+    },
+    "Markdown": {
+      "format_on_save": "on",
+      "hard_tabs": false
+    },
+    "YAML": {
+      // YAML forbids tabs for indentation.
+      "hard_tabs": false
+    },
+  }
+}

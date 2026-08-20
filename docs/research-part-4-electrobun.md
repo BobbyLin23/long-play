@@ -5,6 +5,7 @@
 **Date:** 2026-08-19
 
 **Primary sources used:**
+
 - 安装在本仓库的 `electrobun@1.18.1` npm 包源码（`apps/desktop/node_modules/electrobun`）— 这是与仓库锁定的版本完全一致的权威来源（`dist/api/bun/*.ts`、`dist/api/browser/*.ts`、`src/cli/index.ts`、`README.md`）。
 - 官方 repo：https://github.com/blackboardsh/electrobun （docs 就在 repo 内：`docs/src/content/docs/electrobun/...`，raw 地址 `https://raw.githubusercontent.com/blackboardsh/electrobun/main/docs/src/content/docs/electrobun/...`）
 - 官方站点：https://electrobun.dev （302 重定向到 https://blackboard.sh/electrobun/）
@@ -154,7 +155,7 @@
 3. 持久化方案：播放列表/设置走主进程 `Utils.paths.userData`（typed RPC）或 webview `partition`；不要依赖 `views://` 可写。
 4. 曝光确认：Chromium 自动播放策略（如需启动即播或后台恢复，加 `chromiumFlags` 的 autoplay-policy）、后台音频节流/静音行为、以及从 `views://` origin 拉 archive.org 流的实际 CORS 行为，都要在 CEF 里实测。
 5. 发行收尾：补 macOS `codesign`/`notarize` 与图标、设 `release.baseUrl` 启用自动更新、用三个原生 CI runner 出三平台发行物。
-6. 保持 web 端架构不变，但确保播放核心不依赖本地 `localhost:3000` 的 Elysia API（那是开发/云部署服务；桌面包里没有它），远程 API 需通过 HTTPS 公网地址可达。
+6. 保持 web 端架构不变，但确保播放核心不依赖本地 `localhost:5172` 的 Elysia API（那是开发/云部署服务；桌面包里没有它），远程 API 需通过 HTTPS 公网地址可达。
 
 ## 主要资料来源 URL 汇总
 

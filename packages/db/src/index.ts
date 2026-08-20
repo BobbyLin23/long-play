@@ -1,15 +1,13 @@
-import { createClient } from "@libsql/client";
 import { env } from "@long-play/env/server";
-import { drizzle } from "drizzle-orm/libsql";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 
 import * as schema from "./schema";
 
 export function createDb() {
-  const client = createClient({
-    url: env.DATABASE_URL,
-  });
+	const client = neon(env.DATABASE_URL);
 
-  return drizzle({ client, schema });
+	return drizzle({ client, schema });
 }
 
 export const db = createDb();

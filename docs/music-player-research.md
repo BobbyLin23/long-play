@@ -5,6 +5,7 @@
 > 技术栈：SvelteKit（web，部署 Cloudflare）+ Elysia（server，Node 运行时）+ Electrobun（desktop，CEF 渲染）。
 >
 > 本报告是四份子报告的综合版，详细来源与逐条证据见：
+>
 > - [Part 1 · 免费音乐 API 来源](./research-part-1-music-apis.md)
 > - [Part 2 · 音频播放实现（浏览器 + Elysia + Svelte 5）](./research-part-2-player-impl.md)
 > - [Part 3 · Apple Music 风格 UI/UX 与交互](./research-part-3-ui-ux.md)
@@ -16,12 +17,12 @@
 
 ## 0. 执行摘要（TL;DR）
 
-| 问题 | 结论 |
-|---|---|
-| 免费音乐 API 用什么？ | **Jamendo（CC 授权、原生专辑模型）+ Internet Archive（无 Key、CORS/Range 全开、item=专辑）** 双主源；SoundHelix 17 首占位曲目供开发期联调；FMA/Musopen/Pixabay/ccMixter 已排除（详见 Part 1） |
-| 播放器怎么实现？ | **HTMLAudioElement 为主** + 双元素预载实现专辑内连播（`ended` 事件推进）；**Elysia Node 服务器做 Range 代理**统一拉流（自带 206/Content-Range 透传）；Media Session API 接入系统媒体键；Svelte 5 runes 单例 store 承载播放状态（详见 Part 2） |
-| UI/UX 怎么做？ | 桌面三区骨架（sidebar + 内容区 + 底部迷你条）+ 移动端附底 tab bar 的全屏 Now Playing；**"专辑即队列"** 是产品交互内核；封面取色 + blur 材质营造 Apple Music 质感（详见 Part 3） |
-| Electrobun 能不能打包？ | **能**，仓库脚手架已就绪约 80%。最高风险点是 **Media Session 的 OS 级集成需真机验证**（官方 API 无原生媒体键桥），以及必须把 `exitOnLastWindowClosed` 改为 `false` 支持关窗后台播放（详见 Part 4） |
+| 问题                    | 结论                                                                                                                                                                                                                                          |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 免费音乐 API 用什么？   | **Jamendo（CC 授权、原生专辑模型）+ Internet Archive（无 Key、CORS/Range 全开、item=专辑）** 双主源；SoundHelix 17 首占位曲目供开发期联调；FMA/Musopen/Pixabay/ccMixter 已排除（详见 Part 1）                                                 |
+| 播放器怎么实现？        | **HTMLAudioElement 为主** + 双元素预载实现专辑内连播（`ended` 事件推进）；**Elysia Node 服务器做 Range 代理**统一拉流（自带 206/Content-Range 透传）；Media Session API 接入系统媒体键；Svelte 5 runes 单例 store 承载播放状态（详见 Part 2） |
+| UI/UX 怎么做？          | 桌面三区骨架（sidebar + 内容区 + 底部迷你条）+ 移动端附底 tab bar 的全屏 Now Playing；**"专辑即队列"** 是产品交互内核；封面取色 + blur 材质营造 Apple Music 质感（详见 Part 3）                                                               |
+| Electrobun 能不能打包？ | **能**，仓库脚手架已就绪约 80%。最高风险点是 **Media Session 的 OS 级集成需真机验证**（官方 API 无原生媒体键桥），以及必须把 `exitOnLastWindowClosed` 改为 `false` 支持关窗后台播放（详见 Part 4）                                            |
 
 ---
 
@@ -49,14 +50,14 @@
 
 ### 1.2 已排除的来源（有实测证据）
 
-| 来源 | 排除原因 |
-|---|---|
-| Free Music Archive | API 已下线（实测 404），2018 年起改为邮件申请 Key；目录以 FMA 镜像活在 Internet Archive |
-| Musopen | `api.musopen.org` 无法连接，官网 Cloudflare 反爬，无公共 API |
-| Pixabay Music | 授权清晰但公共 API 只覆盖图片/视频，无音乐端点、无专辑模型 |
-| ccMixter | API 可用但无专辑概念、音频文件强校验 Referer 且无 CORS，浏览器播放必须代理 |
-| FreePD | 已永久关站 |
-| SoundHelix | 17 首程序生成 MP3（实测 206 + Range，单曲 8-10MB），无真实专辑、无授权明示——**仅作开发期占位** |
+| 来源               | 排除原因                                                                                       |
+| ------------------ | ---------------------------------------------------------------------------------------------- |
+| Free Music Archive | API 已下线（实测 404），2018 年起改为邮件申请 Key；目录以 FMA 镜像活在 Internet Archive        |
+| Musopen            | `api.musopen.org` 无法连接，官网 Cloudflare 反爬，无公共 API                                   |
+| Pixabay Music      | 授权清晰但公共 API 只覆盖图片/视频，无音乐端点、无专辑模型                                     |
+| ccMixter           | API 可用但无专辑概念、音频文件强校验 Referer 且无 CORS，浏览器播放必须代理                     |
+| FreePD             | 已永久关站                                                                                     |
+| SoundHelix         | 17 首程序生成 MP3（实测 206 + Range，单曲 8-10MB），无真实专辑、无授权明示——**仅作开发期占位** |
 
 ### 1.3 MVP 落地建议
 
@@ -70,11 +71,11 @@
 
 ### 2.1 浏览器音频方案：HTMLAudioElement 为主
 
-| 方案 | 定位 | 结论 |
-|---|---|---|
-| HTMLAudioElement | 渐进式 URL 播放，`ended` 事件是专辑连播的核心钩子 | **MVP 主力**——进度、seek、事件全都现成 [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio) |
-| Web Audio API | 精确调度（`start(when, offset, duration)`）、gain 渐变 | 仅用于**交叉淡化**（可选）与未来"整张解码"增强 [规范](https://webaudio.github.io/web-audio-api/) |
-| MSE | 分片自适应流（HLS/DASH） | 非 MVP——需要服务端切分，文档明说渐进式播放对非自适应场景"simple and adequate" |
+| 方案             | 定位                                                   | 结论                                                                                                          |
+| ---------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| HTMLAudioElement | 渐进式 URL 播放，`ended` 事件是专辑连播的核心钩子      | **MVP 主力**——进度、seek、事件全都现成 [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio) |
+| Web Audio API    | 精确调度（`start(when, offset, duration)`）、gain 渐变 | 仅用于**交叉淡化**（可选）与未来"整张解码"增强 [规范](https://webaudio.github.io/web-audio-api/)              |
+| MSE              | 分片自适应流（HLS/DASH）                               | 非 MVP——需要服务端切分，文档明说渐进式播放对非自适应场景"simple and adequate"                                 |
 
 **Gapless（无间隙连播）**：MDN 未声明 `<audio>` 原生 gapless 能力，逐轨切换有解码重入间隙。推荐 **双 `<audio>` 元素 + 预载策略**：当前轨播放时把下一轨 `preload="auto"`，`ended` 时直接 swap（同专辑内默认直切，保持专辑连续感；交叉淡化作为可选开关）。更彻底的方案（整张专辑解码进 AudioBuffer 后按时间轴顺序调度）作为"预下载整张专辑"的后续增强，不做首播路径。
 
@@ -120,16 +121,16 @@
 
 这是产品差异化的灵魂，逐项决策（详见 Part 3 §2）：
 
-| 交互点 | 决策 |
-|---|---|
-| Play 按钮语义 | 恒为"播放整张专辑"（第 1 轨起按官方顺序）；若正在播该专辑，提供 Resume / 从头播放二级选择 |
-| 队列语义 | **专辑即队列**——切专辑 = 替换队列（默认立即 + 5 秒可撤销 toast）；完全没有"加入单曲"入口；队列内部可拖拽排序/一键恢复官方顺序；队列与进度持久化 |
-| 跳过 | 允许，但在专辑边界内：Next 永远停在专辑内下一首；Previous 遵守">3-5 秒先回本曲开头"惯例 |
-| Shuffle | 只做**专辑内洗牌**；按钮变色即开启（对齐 Apple Music 约定）；不做跨专辑 Shuffle Albums |
-| 专辑结束 | **默认播完停止**——不接歌不推荐；完成态给 Replay（重播）+ Repeat Album toggle（只保留 off / repeat all 两态，**去掉 repeat one**——单曲循环与产品精神冲突） |
-| Up Next | = 专辑剩余曲目清单，头部"正在播放：专辑 X（Track 3 of 12）"定位感；点击任意曲目跳播并续播剩余 |
-| 迷你条语境 | 标题 > 专辑名—艺术家 > 进度 + 轻量"N/12"徽标，任何页面都知道"我在专辑第几首" |
-| 自动续播下一张 | 不做（做成用户主动点击的"你可能也喜欢"卡片，opt-in 才考虑自动接续） |
+| 交互点         | 决策                                                                                                                                                      |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Play 按钮语义  | 恒为"播放整张专辑"（第 1 轨起按官方顺序）；若正在播该专辑，提供 Resume / 从头播放二级选择                                                                 |
+| 队列语义       | **专辑即队列**——切专辑 = 替换队列（默认立即 + 5 秒可撤销 toast）；完全没有"加入单曲"入口；队列内部可拖拽排序/一键恢复官方顺序；队列与进度持久化           |
+| 跳过           | 允许，但在专辑边界内：Next 永远停在专辑内下一首；Previous 遵守">3-5 秒先回本曲开头"惯例                                                                   |
+| Shuffle        | 只做**专辑内洗牌**；按钮变色即开启（对齐 Apple Music 约定）；不做跨专辑 Shuffle Albums                                                                    |
+| 专辑结束       | **默认播完停止**——不接歌不推荐；完成态给 Replay（重播）+ Repeat Album toggle（只保留 off / repeat all 两态，**去掉 repeat one**——单曲循环与产品精神冲突） |
+| Up Next        | = 专辑剩余曲目清单，头部"正在播放：专辑 X（Track 3 of 12）"定位感；点击任意曲目跳播并续播剩余                                                             |
+| 迷你条语境     | 标题 > 专辑名—艺术家 > 进度 + 轻量"N/12"徽标，任何页面都知道"我在专辑第几首"                                                                              |
+| 自动续播下一张 | 不做（做成用户主动点击的"你可能也喜欢"卡片，opt-in 才考虑自动接续）                                                                                       |
 
 ### 3.3 快捷键与无障碍（P0 部分摘录）
 
@@ -154,7 +155,7 @@
 3. **持久化**：`views://` 只读，播放列表/设置要走主进程 `Utils.paths.userData`（typed RPC）或 webview `partition`。
 4. **Chronium 行为实测**：自动播放策略（如需启动即播，`chromiumFlags` 配 autoplay-policy）、后台音频节流、`views://` origin 拉 archive.org 流的 CORS。
 5. **发行收尾**：补 macOS codesign/notarize + 图标、`release.baseUrl`（静态托管即可自动更新）、三个原生 CI runner 出三平台包。
-6. 桌面包里没有 `localhost:3000` 的 Elysia——远程 API 需走 HTTPS 公网地址。
+6. 桌面包里没有 `localhost:5172` 的 Elysia——远程 API 需走 HTTPS 公网地址。
 
 ---
 

@@ -1,42 +1,42 @@
 {
-  "name": "long-play",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "type": "module",
-  "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build --filter='!desktop' && turbo run build -F desktop",
-    "check-types": "turbo run check-types",
-    "dev:web": "turbo run dev -F web --",
-    "dev:desktop": "turbo run dev:hmr -F desktop --",
-    "build:desktop": "turbo run build:stable -F desktop --",
-    "build:desktop:canary": "turbo run build:canary -F desktop --",
-    "dev:server": "turbo run dev -F server --",
-    "db:push": "turbo run db:push -F @long-play/db --",
-    "db:studio": "turbo run db:studio -F @long-play/db --",
-    "db:generate": "turbo run db:generate -F @long-play/db --",
-    "db:migrate": "turbo run db:migrate -F @long-play/db --",
-    "db:local": "turbo run db:local -F @long-play/db --",
-    "deploy": "turbo run deploy -F @long-play/infra --",
-    "destroy": "turbo run destroy -F @long-play/infra --",
-    "check": "biome check --write ."
-  },
-  "dependencies": {
-    "@long-play/env": "workspace:*",
-    "dotenv": "catalog:",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.5.6",
-    "@cloudflare/workers-types": "^5.20260728.1",
-    "@long-play/config": "workspace:*",
-    "@types/node": "catalog:",
-    "lefthook": "^2.1.10",
-    "turbo": "^2.10.7",
-    "typescript": "catalog:"
-  },
-  "packageManager": "pnpm@11.17.0"
+	"name": "long-play",
+	"private": true,
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"type": "module",
+	"scripts": {
+		"dev": "turbo run dev",
+		"build": "turbo run build --filter='!desktop' && turbo run build -F desktop",
+		"check-types": "turbo run check-types",
+		"dev:web": "turbo run dev -F web --",
+		"dev:browser": "turbo run dev --filter='!desktop'",
+		"dev:desktop": "turbo run dev:hmr -F desktop --",
+		"build:desktop": "turbo run build:stable -F desktop --",
+		"build:desktop:canary": "turbo run build:canary -F desktop --",
+		"dev:server": "turbo run dev -F server --",
+		"db:push": "turbo run db:push -F @long-play/db --",
+		"db:studio": "turbo run db:studio -F @long-play/db --",
+		"db:generate": "turbo run db:generate -F @long-play/db --",
+		"db:migrate": "turbo run db:migrate -F @long-play/db --",
+		"deploy": "turbo run deploy -F @long-play/infra --",
+		"destroy": "turbo run destroy -F @long-play/infra --",
+		"check": "biome check --write ."
+	},
+	"dependencies": {
+		"@long-play/env": "workspace:*",
+		"dotenv": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.6",
+		"@cloudflare/workers-types": "^5.20260728.1",
+		"@long-play/config": "workspace:*",
+		"@types/node": "catalog:",
+		"lefthook": "^2.1.10",
+		"turbo": "^2.10.7",
+		"typescript": "catalog:"
+	},
+	"packageManager": "pnpm@11.17.0"
 }

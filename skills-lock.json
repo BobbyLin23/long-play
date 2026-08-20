@@ -1,23 +1,23 @@
 {
-  "version": 1,
-  "skills": {
-    "better-auth-best-practices": {
-      "source": "better-auth/skills",
-      "sourceType": "github",
-      "skillPath": "better-auth/best-practices/SKILL.md",
-      "computedHash": "61ba0ef64ed2e7c424401cc848ca33dd6d790a720c44727717dc0c5cba5fc122"
-    },
-    "elysiajs": {
-      "source": "elysiajs/skills",
-      "sourceType": "github",
-      "skillPath": "elysia/SKILL.md",
-      "computedHash": "55268e69a2c766ed67e56a0db57544f60cc52dba0c7f024a974baf965e525e1b"
-    },
-    "turborepo": {
-      "source": "vercel/turborepo",
-      "sourceType": "github",
-      "skillPath": "skills/turborepo/SKILL.md",
-      "computedHash": "89af426ed2e1a7fc8baafa755002b1983d05432bcb44cc0daff0bbacf2873d30"
-    }
-  }
+	"version": 1,
+	"skills": {
+		"better-auth-best-practices": {
+			"source": "better-auth/skills",
+			"sourceType": "github",
+			"skillPath": "better-auth/best-practices/SKILL.md",
+			"computedHash": "61ba0ef64ed2e7c424401cc848ca33dd6d790a720c44727717dc0c5cba5fc122"
+		},
+		"elysiajs": {
+			"source": "elysiajs/skills",
+			"sourceType": "github",
+			"skillPath": "elysia/SKILL.md",
+			"computedHash": "55268e69a2c766ed67e56a0db57544f60cc52dba0c7f024a974baf965e525e1b"
+		},
+		"turborepo": {
+			"source": "vercel/turborepo",
+			"sourceType": "github",
+			"skillPath": "skills/turborepo/SKILL.md",
+			"computedHash": "89af426ed2e1a7fc8baafa755002b1983d05432bcb44cc0daff0bbacf2873d30"
+		}
+	}
 }

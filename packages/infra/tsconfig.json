@@ -1,4 +1,4 @@
 {
-  "extends": "@long-play/config/tsconfig.base.json",
-  "include": ["alchemy.run.ts"]
+	"extends": "@long-play/config/tsconfig.base.json",
+	"include": ["alchemy.run.ts"]
 }

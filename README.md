@@ -11,7 +11,7 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - **oRPC** - End-to-end type-safe APIs with OpenAPI integration
 - **Node.js** - Runtime environment
 - **Drizzle** - TypeScript-first ORM
-- **SQLite/Turso** - Database engine
+- **Neon Postgres** - Serverless Postgres database
 - **Authentication** - Better-Auth
 - **Turborepo** - Optimized monorepo build system
 - **Biome** - Linting and formatting
@@ -27,15 +27,15 @@ pnpm install
 
 ## Database Setup
 
-This project uses SQLite with Drizzle ORM.
+This project uses Neon Postgres with Drizzle ORM, via the Neon serverless driver over HTTP.
 
-1. Start the local SQLite database (optional):
+1. Create a Neon project (or a branch of one) at [console.neon.tech](https://console.neon.tech).
+
+2. Set `DATABASE_URL` in `apps/server/.env` to the Neon pooled connection string:
 
 ```bash
-pnpm run db:local
+DATABASE_URL=postgresql://<user>:<password>@ep-xxx-pooler.<region>.aws.neon.tech/<database>?sslmode=require
 ```
-
-2. Update your `.env` file in the `apps/server` directory with the appropriate connection details if needed.
 
 3. Apply the schema to your database:
 
@@ -50,7 +50,7 @@ pnpm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser to see the web application.
-The API is running at [http://localhost:3000](http://localhost:3000).
+The API is running at [http://localhost:5172](http://localhost:5172).
 
 ## Deployment
 
@@ -98,7 +98,6 @@ long-play/
 - `pnpm run db:generate`: Generate database client/types
 - `pnpm run db:migrate`: Run database migrations
 - `pnpm run db:studio`: Open database studio UI
-- `pnpm run db:local`: Start the local SQLite database
 - `pnpm run check`: Run Biome formatting and linting
 - `pnpm run dev:desktop`: Start the Electrobun desktop app with HMR
 - `pnpm run build:desktop`: Build the stable Electrobun desktop app

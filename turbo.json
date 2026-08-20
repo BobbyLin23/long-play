@@ -1,63 +1,59 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "ui": "tui",
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".svelte-kit/**", "build/**", "artifacts/**"]
-    },
-    "lint": {
-      "dependsOn": ["^lint"]
-    },
-    "check-types": {
-      "dependsOn": ["^check-types"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "dev:hmr": {
-      "cache": false,
-      "persistent": true
-    },
-    "build:stable": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["artifacts/**", "build/**"]
-    },
-    "build:canary": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["artifacts/**", "build/**"]
-    },
-    "db:push": {
-      "cache": false,
-      "interactive": true
-    },
-    "db:generate": {
-      "cache": false,
-      "interactive": true
-    },
-    "db:migrate": {
-      "cache": false,
-      "interactive": true
-    },
-    "db:studio": {
-      "cache": false,
-      "persistent": true
-    },
-    "db:local": {
-      "cache": false,
-      "persistent": true
-    },
-    "deploy": {
-      "cache": false,
-      "interactive": true
-    },
-    "destroy": {
-      "cache": false,
-      "interactive": true
-    }
-  }
+	"$schema": "https://turbo.build/schema.json",
+	"ui": "tui",
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": ["dist/**", ".svelte-kit/**", "build/**", "artifacts/**"]
+		},
+		"lint": {
+			"dependsOn": ["^lint"]
+		},
+		"check-types": {
+			"dependsOn": ["^check-types"]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"dev:hmr": {
+			"cache": false,
+			"persistent": true
+		},
+		"build:stable": {
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": ["artifacts/**", "build/**"]
+		},
+		"build:canary": {
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": ["artifacts/**", "build/**"]
+		},
+		"db:push": {
+			"cache": false,
+			"interactive": true
+		},
+		"db:generate": {
+			"cache": false,
+			"interactive": true
+		},
+		"db:migrate": {
+			"cache": false,
+			"interactive": true
+		},
+		"db:studio": {
+			"cache": false,
+			"persistent": true
+		},
+		"deploy": {
+			"cache": false,
+			"interactive": true
+		},
+		"destroy": {
+			"cache": false,
+			"interactive": true
+		}
+	}
 }

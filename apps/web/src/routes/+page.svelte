@@ -1,27 +1,11 @@
 <script lang="ts">
-import { orpc } from "$lib/orpc";
 import { createQuery } from "@tanstack/svelte-query";
+import { orpc } from "$lib/orpc";
+
 const healthCheck = createQuery(() => orpc.healthCheck.queryOptions());
-
-const TITLE_TEXT = `
-   ██████╗ ███████╗████████╗████████╗███████╗██████╗
-   ██╔══██╗██╔════╝╚══██╔══╝╚══██╔══╝██╔════╝██╔══██╗
-   ██████╔╝█████╗     ██║      ██║   █████╗  ██████╔╝
-   ██╔══██╗██╔══╝     ██║      ██║   ██╔══╝  ██╔══██╗
-   ██████╔╝███████╗   ██║      ██║   ███████╗██║  ██║
-   ╚═════╝ ╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝
-
-   ████████╗    ███████╗████████╗ █████╗  ██████╗██╗  ██╗
-   ╚══██╔══╝    ██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
-      ██║       ███████╗   ██║   ███████║██║     █████╔╝
-      ██║       ╚════██║   ██║   ██╔══██║██║     ██╔═██╗
-      ██║       ███████║   ██║   ██║  ██║╚██████╗██║  ██╗
-      ╚═╝       ╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
-   `;
 </script>
 
 <div class="container mx-auto max-w-3xl px-4 py-2">
-	<pre class="overflow-x-auto font-mono text-sm">{TITLE_TEXT}</pre>
 	<div class="grid gap-6">
 		<section class="rounded-lg border p-4">
 			<h2 class="mb-2 font-medium">API Status</h2>
