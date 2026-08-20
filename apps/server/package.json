@@ -16,6 +16,7 @@
 		"@long-play/auth": "workspace:*",
 		"@long-play/db": "workspace:*",
 		"@long-play/env": "workspace:*",
+		"@long-play/music": "workspace:*",
 		"@neondatabase/serverless": "catalog:",
 		"@orpc/openapi": "catalog:",
 		"@orpc/server": "catalog:",
@@ -23,6 +24,7 @@
 		"@sinclair/typebox": "^0.34.52",
 		"better-auth": "catalog:",
 		"dotenv": "catalog:",
+		"drizzle-orm": "^0.45.2",
 		"elysia": "catalog:",
 		"zod": "catalog:"
 	},

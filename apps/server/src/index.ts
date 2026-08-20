@@ -11,6 +11,8 @@ import { RPCHandler } from "@orpc/server/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { Elysia } from "elysia";
 
+import { audioProxyRoutes } from "./audio-proxy";
+
 const rpcHandler = new RPCHandler(appRouter, {
 	interceptors: [
 		onError((error) => {
@@ -74,6 +76,10 @@ new Elysia({ adapter: node() })
 		},
 	)
 	.get("/", () => "OK")
-	.listen(5172, () => {
+	.use(audioProxyRoutes)
+	.listen(5172, async () => {
+		// L2 缓存是临时加速层：启动时清空，不留持久状态
+		const { cleanUpCache } = await import("./audio-cache");
+		await cleanUpCache();
 		console.log("Server is running on http://localhost:5172");
 	});

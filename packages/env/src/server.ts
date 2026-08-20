@@ -11,6 +11,10 @@ export const env = createEnv({
 		NODE_ENV: z
 			.enum(["development", "production", "test"])
 			.default("development"),
+		JAMENDO_CLIENT_ID: z.string().optional(),
+		// L2 音频磁盘缓存（临时加速层；容量 0 表示禁用）
+		AUDIO_CACHE_DIR: z.string().default("./.audio-cache"),
+		AUDIO_CACHE_MAX_MB: z.coerce.number().default(512),
 	},
 	runtimeEnv: process.env,
 	skipValidation: !!process.env.SKIP_ENV_VALIDATION,

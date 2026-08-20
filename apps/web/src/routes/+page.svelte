@@ -1,26 +1,47 @@
 <script lang="ts">
-	import { createQuery } from "@tanstack/svelte-query";
-	import { orpc } from "$lib/orpc";
+import { useAlbumList } from "$lib/api/albums";
+import AlbumCover from "$lib/components/AlbumCover.svelte";
 
-	const healthCheck = createQuery(() => orpc.healthCheck.queryOptions());
+const albumQuery = useAlbumList();
+const albumList = $derived(albumQuery.data);
+const isPending = $derived(albumQuery.isPending);
+const isError = $derived(albumQuery.isError);
+const error = $derived(albumQuery.error);
 </script>
 
-<div class="container mx-auto max-w-3xl px-4 py-2">
-	<div class="grid gap-6">
-		<section class="rounded-lg border p-4">
-			<h2 class="mb-2 font-medium">API Status</h2>
-			<div class="flex items-center gap-2">
-				<div
-					class={`h-2 w-2 rounded-full ${healthCheck.data ? "bg-green-500" : "bg-red-500"}`}
-				></div>
-				<span class="text-muted-foreground text-sm">
-					{healthCheck.isLoading
-						? "Checking..."
-						: healthCheck.data
-							? "Connected"
-							: "Disconnected"}
-				</span>
-			</div>
-		</section>
-	</div>
+<svelte:head>
+	<title>Browse — long-play</title>
+</svelte:head>
+
+<div class="px-6 py-8">
+	<h1 class="mb-6 text-3xl font-bold tracking-tight">Browse</h1>
+
+	{#if isError}
+		<div class="rounded-lg bg-red-500/10 p-3 text-sm text-red-400">
+			加载失败: {error?.message}
+		</div>
+	{:else if isPending}
+		<div class="text-[var(--color-text-secondary)]">加载中…</div>
+	{:else if albumList?.albums.length}
+		<div class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+			{#each albumList.albums as album (album.id)}
+				<a
+					href={`/album/${album.id}`}
+					class="group block"
+				>
+					<div class="relative aspect-square overflow-hidden rounded-lg bg-[var(--color-surface-2)] shadow-lg transition-transform group-hover:scale-[1.02]">
+						<AlbumCover src={album.coverUrl} />
+					</div>
+					<div class="mt-2 truncate text-sm font-medium">{album.title}</div>
+					<div class="truncate text-xs text-[var(--color-text-secondary)]">
+						{album.artist} · {album.trackCount} 首
+					</div>
+				</a>
+			{/each}
+		</div>
+	{:else}
+		<div class="py-16 text-center text-[var(--color-text-secondary)]">
+			目录为空。请先运行 <code class="rounded bg-white/10 px-1">pnpm --filter @long-play/db seed</code>
+		</div>
+	{/if}
 </div>

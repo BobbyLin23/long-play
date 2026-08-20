@@ -56,3 +56,6 @@ coverage
 .cache
 tmp
 temp
+
+# L2 音频磁盘缓存（临时加速层，不留持久状态）
+.audio-cache

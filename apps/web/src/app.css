@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+@theme {
+	--color-accent: #fa586a;
+	--color-accent-hover: #e84c5e;
+	--color-bg-base: #0a0a0b;
+	--color-bg-surface: #161618;
+	--color-bg-surface-2: #1f1f22;
+	--color-text-primary: #f5f5f7;
+	--color-text-secondary: #a1a1a8;
+	--font-sans:
+		-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+		system-ui, "Helvetica Neue", Arial, sans-serif;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	background-color: var(--color-bg-base);
+	color: var(--color-text-primary);
+	font-family: var(--font-sans);
+	-webkit-font-smoothing: antialiased;
+}
+
+/* 隐藏原生滚动条，模拟 Apple Music 干净滚动 */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* 焦点环 */
+:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}

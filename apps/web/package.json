@@ -16,6 +16,7 @@
 	"dependencies": {
 		"@long-play/api": "workspace:*",
 		"@long-play/env": "workspace:*",
+		"@long-play/music": "workspace:*",
 		"@orpc/client": "catalog:",
 		"@orpc/server": "catalog:",
 		"@orpc/tanstack-query": "^1.14.12",
