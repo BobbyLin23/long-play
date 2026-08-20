@@ -1,4 +1,4 @@
-<script lang="ts">
+s<script lang="ts">
 import { useCreatePlaylist, usePlaylistList } from "$lib/api/playlists";
 import { authClient } from "$lib/auth-client";
 import PlaylistCard from "$lib/components/PlaylistCard.svelte";
@@ -35,7 +35,7 @@ function closeCreate() {
 function submitCreate(event: SubmitEvent) {
 	event.preventDefault();
 	if (!name.trim()) {
-		formError = "请填写列表名称";
+		formError = "Please enter a playlist name";
 		return;
 	}
 	createPlaylist.mutate({
@@ -50,43 +50,43 @@ $effect(() => {
 	} else if (createPlaylist.isError) {
 		formError =
 			(createPlaylist.error as Error | undefined)?.message ??
-			"创建失败，请重试";
+			"Couldn't create playlist. Please try again.";
 	}
 });
 </script>
 
 <svelte:head>
-	<title>Playlists — long-play</title>
+	<title>Playlists — Long Play</title>
 </svelte:head>
 
 <div class="px-6 py-8">
 	{#if !user}
 		<div class="flex flex-col items-center justify-center py-24 text-center">
-			<div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-surface-2)] text-3xl">
+			<div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-(--color-surface-2) text-3xl">
 				🎧
 			</div>
-			<h1 class="mb-2 text-2xl font-bold tracking-tight">请先登录</h1>
-			<p class="mb-6 text-sm text-[var(--color-text-secondary)]">
-				登录后即可创建和整理你的收藏列表
+			<h1 class="mb-2 text-2xl font-bold tracking-tight">Please log in</h1>
+			<p class="mb-6 text-sm text-text-secondary">
+				Sign in to create and organize your playlists
 			</p>
 			<a
 				href="/login"
-				class="rounded-full bg-[var(--color-accent)] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
-			>前往登录</a
+				class="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+			>Go to log in</a>
 			>
 		</div>
 	{:else}
 		<div class="mb-6 flex items-center justify-between gap-4">
-			<h1 class="text-3xl font-bold tracking-tight">我的收藏列表</h1>
+			<h1 class="text-3xl font-bold tracking-tight">Your playlists</h1>
 			<button
-				class="rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+				class="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
 				onclick={openCreate}
-			>＋ 新建列表</button
+			>＋ New playlist</button>
 			>
 		</div>
 
 		{#if isPending}
-			<div class="text-[var(--color-text-secondary)]">加载中…</div>
+			<div class="text-text-secondary">Loading…</div>
 		{:else if playlistList?.length}
 			<div class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
 				{#each playlistList as playlist (playlist.id)}
@@ -97,17 +97,17 @@ $effect(() => {
 			</div>
 		{:else}
 			<div class="flex flex-col items-center justify-center py-24 text-center">
-				<div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-surface-2)] text-3xl">
+				<div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-(--color-surface-2) text-3xl">
 					♪
 				</div>
-				<h2 class="mb-2 text-xl font-semibold tracking-tight">还没有收藏列表</h2>
-				<p class="mb-6 text-sm text-[var(--color-text-secondary)]">
-					创建第一个列表，把喜欢的专辑收进同一个地方，随时连播
+				<h2 class="mb-2 text-xl font-semibold tracking-tight">No playlists yet</h2>
+				<p class="mb-6 text-sm text-text-secondary">
+					Create your first playlist to collect albums and play them in one place
 				</p>
 				<button
-					class="rounded-full border border-white/20 px-5 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-white/50 hover:bg-white/5"
+					class="rounded-full border border-white/20 px-5 py-2 text-sm font-medium text-text-primary transition-colors hover:border-white/50 hover:bg-white/5"
 					onclick={openCreate}
-				>＋ 新建列表</button
+				>＋ New playlist</button
 				>
 			</div>
 		{/if}
@@ -116,16 +116,16 @@ $effect(() => {
 
 <dialog
 	bind:this={dialogEl}
-	class="w-[calc(100%-2rem)] max-w-sm rounded-2xl bg-[var(--color-bg-surface)] p-6 text-[var(--color-text-primary)] backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+	class="w-[calc(100%-2rem)] max-w-sm rounded-2xl bg-bg-surface p-6 text-text-primary backdrop:bg-black/60 backdrop:backdrop-blur-sm"
 	onclick={(e) => {
 		if (e.target === dialogEl) closeCreate();
 	}}
 >
 	<form class="space-y-4" method="dialog" onsubmit={submitCreate}>
-		<h2 class="text-lg font-semibold tracking-tight">新建收藏列表</h2>
+		<h2 class="text-lg font-semibold tracking-tight">New playlist</h2>
 
 		<div>
-			<label for="playlist-name" class="mb-1 block text-sm font-medium">名称</label>
+			<label for="playlist-name" class="mb-1 block text-sm font-medium">Name</label>
 			<input
 				id="playlist-name"
 				bind:this={nameInput}
@@ -133,20 +133,20 @@ $effect(() => {
 				bind:value={name}
 				required
 				maxlength={100}
-				class="w-full rounded-lg border border-white/10 bg-[var(--color-surface-2)] px-3 py-2.5 text-sm outline-none focus:border-[var(--color-accent)]"
-				placeholder="例如：通勤精选"
+				class="w-full rounded-lg border border-white/10 bg-(--color-surface-2) px-3 py-2.5 text-sm outline-none focus:border-accent"
+				placeholder="e.g. Commute picks"
 			/>
 		</div>
 
 		<div>
-			<label for="playlist-desc" class="mb-1 block text-sm font-medium">描述（可选）</label>
+			<label for="playlist-desc" class="mb-1 block text-sm font-medium">Description (optional)</label>
 			<textarea
 				id="playlist-desc"
 				bind:value={description}
 				maxlength={500}
 				rows={3}
-				class="w-full resize-none rounded-lg border border-white/10 bg-[var(--color-surface-2)] px-3 py-2.5 text-sm outline-none focus:border-[var(--color-accent)]"
-				placeholder="简单描述这个列表…"
+				class="w-full resize-none rounded-lg border border-white/10 bg-(--color-surface-2) px-3 py-2.5 text-sm outline-none focus:border-accent"
+				placeholder="A short description…"
 			></textarea>
 		</div>
 
@@ -157,16 +157,16 @@ $effect(() => {
 		<div class="flex justify-end gap-3 pt-1">
 			<button
 				type="button"
-				class="rounded-full px-4 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:bg-white/5 hover:text-[var(--color-text-primary)]"
+				class="rounded-full px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
 				onclick={closeCreate}
-			>取消</button
+			>Cancel</button
 			>
 			<button
 				type="submit"
 				disabled={createPlaylist.isPending}
-				class="rounded-full bg-[var(--color-accent)] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:opacity-50"
+				class="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
 			>
-				{createPlaylist.isPending ? "创建中…" : "创建"}
+				{createPlaylist.isPending ? "Creating…" : "Create"}
 			</button>
 		</div>
 	</form>

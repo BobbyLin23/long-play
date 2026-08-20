@@ -8,7 +8,7 @@ const currentTime = $derived(player.currentTime);
 const duration = $derived(player.duration);
 const shuffle = $derived(player.shuffle);
 const repeatMode = $derived(player.repeatMode);
-// 专辑播完判定：最后一首已 ended
+// True when the album has finished: last track has ended
 const atAlbumEnd = $derived(
 	player.queue.length > 0 &&
 		player.index >= player.queue.length - 1 &&
@@ -56,11 +56,11 @@ function onSeek(event: Event) {
 		<div class="w-full max-w-lg">
 			{#if atAlbumEnd}
 				<div class="mb-3 flex flex-col items-center gap-2 rounded-lg bg-white/5 py-4">
-					<span class="text-sm text-[var(--color-text-secondary)]">整张专辑已播完</span>
+					<span class="text-sm text-[var(--color-text-secondary)]">Album finished</span>
 					<button
 						class="rounded-full bg-[var(--color-accent)] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
 						onclick={() => player.replayAlbum()}
-					>↻ 重播整张专辑</button
+					>Replay album</button
 					>
 				</div>
 			{:else}
@@ -75,7 +75,7 @@ function onSeek(event: Event) {
 					max={duration || 0}
 					value={currentTime}
 					oninput={onSeek}
-					aria-label="播放进度"
+					aria-label="Playback progress"
 				/>
 			{/if}
 
@@ -84,33 +84,33 @@ function onSeek(event: Event) {
 					class="rounded-full p-2 text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)] {shuffle ? 'text-[var(--color-accent)]' : ''}"
 					onclick={() => player.toggleShuffle()}
 					aria-pressed={shuffle}
-					aria-label="洗牌"
+					aria-label="Shuffle"
 				>🔀</button
 				>
 				<button
 					class="rounded-full p-3 text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
 					onclick={() => player.prev()}
-					aria-label="上一首"
+					aria-label="Previous track"
 				>⏮</button
 				>
 				<button
 					class="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-text-primary)] text-2xl text-[var(--color-bg-base)] transition-transform hover:scale-105"
 					onclick={() => player.toggle()}
-					aria-label={isPlaying ? "暂停" : "播放"}
+					aria-label={isPlaying ? "Pause" : "Play"}
 				>
 					{isPlaying ? "⏸" : "▶"}
 				</button>
 				<button
 					class="rounded-full p-3 text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
 					onclick={() => player.next()}
-					aria-label="下一首"
+					aria-label="Next track"
 				>⏭</button
 				>
 				<button
 					class="rounded-full p-2 text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)] {repeatMode === 'all' ? 'text-[var(--color-accent)]' : ''}"
 					onclick={() => player.toggleRepeat()}
 					aria-pressed={repeatMode === "all"}
-					aria-label="循环模式"
+					aria-label="Repeat mode"
 				>🔁</button
 				>
 			</div>

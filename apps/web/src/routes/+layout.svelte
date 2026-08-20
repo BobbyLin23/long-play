@@ -15,7 +15,6 @@ let nowPlayingOpen = $state(false);
 onMount(() => {
 	initPlayer();
 
-	// 全局快捷键：空格/K 播放暂停、N/P 前后曲目（输入框聚焦时不拦截）
 	const isTyping = (el: EventTarget | null) => {
 		const target = el as HTMLElement | null;
 		if (!target) return false;
@@ -51,18 +50,15 @@ onMount(() => {
 <QueryClientProvider client={queryClient}>
 	<div class="flex h-svh flex-col">
 		<div class="flex flex-1 overflow-hidden">
-			<!-- 桌面 Sidebar（隐藏于移动端） -->
 			<div class="hidden md:block">
 				<Sidebar />
 			</div>
 
-			<!-- 内容区 -->
 			<main class="flex-1 overflow-y-auto">
 				{@render children()}
 			</main>
 		</div>
 
-		<!-- 底部迷你条：点击打开全屏 Now Playing -->
 		<button
 			class="text-left"
 			onclick={() => {
@@ -75,15 +71,14 @@ onMount(() => {
 
 	{#if nowPlayingOpen && player.currentTrack}
 		<div
-			class="fixed inset-0 z-50 overflow-y-auto bg-[var(--color-bg-base)]"
+			class="fixed inset-0 z-50 overflow-y-auto bg-bg-base"
 			role="dialog"
 			aria-modal="true"
-			aria-label="正在播放"
+			aria-label="Now playing"
 		>
 			<button
 				class="fixed right-4 top-4 z-10 rounded-full bg-white/10 px-4 py-2 text-sm hover:bg-white/20"
-				onclick={() => (nowPlayingOpen = false)}
-			>✕ 关闭</button
+				onclick={() => (nowPlayingOpen = false)}>Close</button
 			>
 			<NowPlaying />
 		</div>

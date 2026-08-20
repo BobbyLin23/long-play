@@ -12,7 +12,7 @@ onMount(() => {
 	initPlayer();
 });
 
-// M1/M2 联调页：从 SoundHelix 占位专辑反推代理 trackId（sh-<n>）
+// M1/M2 integration page: map SoundHelix placeholder albums to proxy track IDs (sh-<n>)
 function toPlayable(
 	album: ReturnType<typeof getSoundHelixAlbums>[number],
 ): PlayableTrack[] {
@@ -35,7 +35,7 @@ const shuffle = $derived(player.shuffle);
 const repeatMode = $derived(player.repeatMode);
 
 $effect(() => {
-	// 播放状态变化时同步系统媒体控制
+	// Sync system media controls when playback state changes
 	syncMediaSession();
 });
 
@@ -57,7 +57,7 @@ function onSeek(event: Event) {
 </script>
 
 <svelte:head>
-	<title>Player Test — long-play</title>
+	<title>Player Test — Long Play</title>
 </svelte:head>
 
 <div class="mx-auto max-w-3xl px-4 py-8">
@@ -68,7 +68,7 @@ function onSeek(event: Event) {
 			{#if player.currentTrack}
 				{player.currentTrack.title}
 			{:else}
-				未在播放
+				Not playing
 			{/if}
 		</p>
 		{#if player.currentTrack}
@@ -83,7 +83,7 @@ function onSeek(event: Event) {
 				>
 				<button
 					class="rounded px-4 py-1.5 bg-red-600 hover:bg-red-500"
-					onclick={() => player.toggle()}>{player.isPlaying ? "⏸ 暂停" : "▶ 播放"}</button
+					onclick={() => player.toggle()}>{player.isPlaying ? "Pause" : "Play"}</button
 				>
 				<button
 					class="rounded px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700"
@@ -105,7 +105,7 @@ function onSeek(event: Event) {
 		{/if}
 	</div>
 
-	<h2 class="mb-2 text-lg font-semibold">占位专辑（SoundHelix）</h2>
+	<h2 class="mb-2 text-lg font-semibold">Placeholder albums (SoundHelix)</h2>
 	<ul class="grid gap-2">
 		{#each albums as album, i (album.externalId)}
 			<li>
@@ -114,7 +114,7 @@ function onSeek(event: Event) {
 					onclick={() => playAlbum(i)}
 				>
 					<span class="font-medium">{album.title}</span>
-					<span class="ml-2 text-sm opacity-60">{album.tracks.length} 首</span>
+					<span class="ml-2 text-sm opacity-60">{album.tracks.length} tracks</span>
 				</button>
 			</li>
 		{/each}
@@ -129,10 +129,10 @@ function onSeek(event: Event) {
 			<button
 				class="rounded border px-2 py-1 {repeatMode === 'all' ? 'border-red-500 text-red-400' : 'border-zinc-600'}"
 				onclick={() => player.toggleRepeat()}
-				aria-pressed={repeatMode === "all"}>🔁 {repeatMode === "all" ? "全部循环" : "不循环"}</button
+				aria-pressed={repeatMode === "all"}>🔁 {repeatMode === "all" ? "Repeat all" : "No repeat"}</button
 			>
 		</div>
 		<p class="mt-6 text-xs opacity-50">
-			说明：M1/M2 联调用 SoundHelix 直链；末曲播完自动停止（产品约束）。拖动进度条验证 206 seek。
+			M1/M2 uses SoundHelix direct links. Playback stops after the last track. Drag the progress bar to test 206 seek.
 	</p>
 </div>

@@ -25,13 +25,13 @@ body {
 	-webkit-font-smoothing: antialiased;
 }
 
-/* 隐藏原生滚动条，模拟 Apple Music 干净滚动 */
+/* Hide native scrollbars for a cleaner music-app look */
 * {
 	scrollbar-width: thin;
 	scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
-/* 焦点环 */
+/* Focus ring */
 :focus-visible {
 	outline: 2px solid var(--color-accent);
 	outline-offset: 2px;

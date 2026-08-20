@@ -16,14 +16,14 @@ const isPlaying = $derived(player.isPlaying);
 </script>
 
 <svelte:head>
-	<title>{album?.title ?? "专辑"} — long-play</title>
+	<title>{album?.title ?? "Album"} — Long Play</title>
 </svelte:head>
 
 <div class="px-6 py-8">
 	{#if isPending}
-		<div class="text-[var(--color-text-secondary)]">加载中…</div>
+		<div class="text-text-secondary">Loading…</div>
 	{:else if album}
-		<!-- 头部：大封面 + Large Title -->
+		<!-- Header: large cover + title -->
 		<div class="mb-8 flex flex-col items-center gap-6 text-center md:flex-row md:items-end md:text-left">
 			{#if album.coverUrl}
 				<img
@@ -32,47 +32,47 @@ const isPlaying = $derived(player.isPlaying);
 					class="h-48 w-48 shrink-0 rounded-xl object-cover shadow-2xl md:h-56 md:w-56"
 				/>
 			{:else}
-				<div class="flex h-48 w-48 shrink-0 items-center justify-center rounded-xl bg-[var(--color-surface-2)] text-6xl md:h-56 md:w-56">
+				<div class="flex h-48 w-48 shrink-0 items-center justify-center rounded-xl bg-(--color-surface-2) text-6xl md:h-56 md:w-56">
 					♪
 				</div>
 			{/if}
 			<div>
-				<div class="mb-1 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
-					专辑
+				<div class="mb-1 text-xs font-semibold uppercase tracking-widest text-accent">
+					Album
 				</div>
 				<h1 class="mb-2 text-4xl font-bold tracking-tight md:text-5xl">
 					{album.title}
 				</h1>
-				<div class="text-[var(--color-text-secondary)]">
+				<div class="text-text-secondary">
 					{album.artist}
-					{#if album.year} · {album.year}{/if} · {album.tracks.length} 首
+					{#if album.year} · {album.year}{/if} · {album.tracks.length} tracks
 				</div>
 			</div>
 		</div>
 
-		<!-- 主操作行 -->
+		<!-- Primary actions -->
 		<div class="mb-6 flex items-center gap-3">
 			<button
-				class="rounded-full bg-[var(--color-accent)] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+				class="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
 				onclick={() => playAlbum(album)}
 			>
-				{isCurrentAlbum && isPlaying ? "⏸ 暂停" : "▶ 播放整张专辑"}
+				{isCurrentAlbum && isPlaying ? "Pause" : "Play album"}
 			</button>
 			<button
-				class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-white/50"
+				class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-medium text-text-primary transition-colors hover:border-white/50"
 				onclick={() => player.toggleShuffle()}
 				aria-pressed={player.shuffle}
-			>🔀 洗牌</button
+			>Shuffle</button
 			>
 		</div>
 
-			<!-- 曲目列表 -->
+			<!-- Track list -->
 			<div class="max-w-3xl">
 				<TrackList tracks={album.tracks} onPlay={(i) => playAlbum(album, i)} />
 			</div>
 	{:else}
-		<div class="py-16 text-center text-[var(--color-text-secondary)]">
-			专辑不存在或已删除
+		<div class="py-16 text-center text-text-secondary">
+			Album not found or already deleted
 		</div>
 	{/if}
 </div>

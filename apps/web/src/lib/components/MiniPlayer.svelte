@@ -50,7 +50,7 @@ function onSeek(event: Event) {
 				max={duration || 0}
 				value={currentTime}
 				oninput={onSeek}
-				aria-label="播放进度"
+				aria-label="Playback progress"
 			/>
 			<span>{formatTime(duration)}</span>
 			<span class="ml-1 rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold">
@@ -65,7 +65,7 @@ function onSeek(event: Event) {
 					e.stopPropagation();
 					player.prev();
 				}}
-				aria-label="上一首"
+				aria-label="Previous track"
 			>⏮</button
 			>
 			<button
@@ -74,7 +74,7 @@ function onSeek(event: Event) {
 					e.stopPropagation();
 					player.toggle();
 				}}
-				aria-label={isPlaying ? "暂停" : "播放"}
+				aria-label={isPlaying ? "Pause" : "Play"}
 			>
 				{isPlaying ? "⏸" : "▶"}
 			</button>
@@ -84,7 +84,7 @@ function onSeek(event: Event) {
 					e.stopPropagation();
 					player.next();
 				}}
-				aria-label="下一首"
+				aria-label="Next track"
 			>⏭</button
 			>
 		</div>

@@ -20,6 +20,7 @@
 		"@orpc/client": "catalog:",
 		"@orpc/server": "catalog:",
 		"@orpc/tanstack-query": "^1.14.12",
+		"@tabler/icons-svelte": "^3.46.0",
 		"@tanstack/svelte-form": "^1.33.2",
 		"@tanstack/svelte-query": "^6.1.38",
 		"better-auth": "catalog:",

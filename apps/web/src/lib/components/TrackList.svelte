@@ -64,7 +64,7 @@ function formatTime(seconds?: number | null): string {
 				class="group flex w-full items-center gap-4 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-white/5 {isCurrent ? 'bg-white/10' : ''}"
 				onclick={() => onPlay(i)}
 				aria-current={isCurrent ? "true" : undefined}
-				aria-label={`播放 ${track.title}`}
+				aria-label={`Play ${track.title}`}
 			>
 				<span class="w-6 text-center text-sm text-[var(--color-text-secondary)] group-hover:hidden">
 					{i + 1}

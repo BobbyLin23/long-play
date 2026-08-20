@@ -1,7 +1,7 @@
 <script lang="ts">
 /**
- * 封面取色：离屏 canvas 抽取封面主色，喂给 CSS 变量做页面背景渐变。
- * 一次性计算 + 内存缓存，低端机友好。
+ * Cover color extraction: offscreen canvas samples a dominant color
+ * for CSS background gradients. Computed once and cached in memory.
  */
 
 const cache = new Map<string, string>();
@@ -21,7 +21,7 @@ async function extractColor(src: string): Promise<string> {
 		if (!ctx) return "rgb(30, 30, 34)";
 		ctx.drawImage(img, 0, 0, 40, 40);
 		const data = ctx.getImageData(0, 0, 40, 40).data;
-		// 简单平均主色（跳过纯黑/纯白像素）
+		// Simple average of the dominant color (skip near-black / near-white pixels)
 		let r = 0;
 		let g = 0;
 		let b = 0;

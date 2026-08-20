@@ -17,7 +17,7 @@ async function onSubmit(event: SubmitEvent) {
 	});
 	submitting = false;
 	if (err) {
-		error = err.message ?? "登录失败，请检查邮箱和密码";
+		error = err.message ?? "Sign in failed. Check your email and password.";
 		return;
 	}
 	await goto("/playlists");
@@ -25,43 +25,41 @@ async function onSubmit(event: SubmitEvent) {
 </script>
 
 <svelte:head>
-	<title>登录 — long-play</title>
+	<title>Log in — Long Play</title>
 </svelte:head>
 
 <div class="flex min-h-full items-center justify-center px-4">
 	<div class="w-full max-w-sm">
 		<div class="mb-8 text-center">
-			<div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-accent)] text-2xl font-bold text-white">
-				♪
-			</div>
-			<h1 class="text-2xl font-bold tracking-tight">登录 long-play</h1>
-			<p class="mt-1 text-sm text-[var(--color-text-secondary)]">
-				登录后即可创建和收藏你的专辑列表
+			<img class="mx-auto mb-3 h-16 w-16 object-contain" src="/long-play-logo.png" alt="Long Play" />
+			<h1 class="text-2xl font-bold tracking-tight">Log in to Long Play</h1>
+			<p class="mt-1 text-sm text-text-secondary">
+				Sign in to create and save album collections
 			</p>
 		</div>
 
 		<form class="space-y-4" onsubmit={onSubmit}>
 			<div>
-				<label for="email" class="mb-1 block text-sm font-medium">邮箱</label>
+				<label for="email" class="mb-1 block text-sm font-medium">Email</label>
 				<input
 					id="email"
 					type="email"
 					bind:value={email}
 					required
 					autocomplete="email"
-					class="w-full rounded-lg border border-white/10 bg-[var(--color-surface-2)] px-3 py-2.5 text-sm outline-none focus:border-[var(--color-accent)]"
+					class="w-full rounded-lg border border-white/10 bg-(--color-surface-2) px-3 py-2.5 text-sm outline-none focus:border-accent"
 					placeholder="you@example.com"
 				/>
 			</div>
 			<div>
-				<label for="password" class="mb-1 block text-sm font-medium">密码</label>
+				<label for="password" class="mb-1 block text-sm font-medium">Password</label>
 				<input
 					id="password"
 					type="password"
 					bind:value={password}
 					required
 					autocomplete="current-password"
-					class="w-full rounded-lg border border-white/10 bg-[var(--color-surface-2)] px-3 py-2.5 text-sm outline-none focus:border-[var(--color-accent)]"
+					class="w-full rounded-lg border border-white/10 bg-(--color-surface-2) px-3 py-2.5 text-sm outline-none focus:border-accent"
 					placeholder="••••••••"
 				/>
 			</div>
@@ -75,15 +73,15 @@ async function onSubmit(event: SubmitEvent) {
 			<button
 				type="submit"
 				disabled={submitting}
-				class="w-full rounded-lg bg-[var(--color-accent)] py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:opacity-50"
+				class="w-full rounded-lg bg-accent py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
 			>
-				{submitting ? "登录中…" : "登录"}
+				{submitting ? "Signing in…" : "Log in"}
 			</button>
 		</form>
 
-		<p class="mt-6 text-center text-sm text-[var(--color-text-secondary)]">
-			还没有账号？
-			<a href="/register" class="text-[var(--color-accent)] hover:underline">注册</a>
+		<p class="mt-6 text-center text-sm text-text-secondary">
+			Don't have an account?
+			<a href="/register" class="text-accent hover:underline">Sign up</a>
 		</p>
 	</div>
 </div>

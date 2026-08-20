@@ -2,8 +2,8 @@
 import { usePlaylistDetail } from "$lib/api/playlists";
 
 /**
- * 收藏列表卡片：封面取列表内第一张专辑（无则 ♪ 占位）。
- * 仅展示元信息，跳转由父级 <a> 包裹。
+ * Playlist card: cover from the first album in the list (♪ placeholder if empty).
+ * Metadata only; navigation is wrapped by the parent <a>.
  */
 
 let { playlist } = $props<{
@@ -22,7 +22,7 @@ const firstAlbum = $derived(detail?.albums[0]);
 
 function formatDate(date: Date | string): string {
 	const d = typeof date === "string" ? new Date(date) : date;
-	return d.toLocaleDateString("zh-CN", {
+	return d.toLocaleDateString("en-US", {
 		year: "numeric",
 		month: "long",
 		day: "numeric",
@@ -51,7 +51,7 @@ function formatDate(date: Date | string): string {
 	<div class="min-w-0">
 		<div class="truncate text-sm font-medium">{playlist.name}</div>
 		<div class="truncate text-xs text-[var(--color-text-secondary)]">
-			{playlist.albumCount} 张专辑 · {formatDate(playlist.createdAt)}
+			{playlist.albumCount} albums · {formatDate(playlist.createdAt)}
 		</div>
 	</div>
 </div>
