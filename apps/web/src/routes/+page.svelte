@@ -1,8 +1,8 @@
 <script lang="ts">
-import { createQuery } from "@tanstack/svelte-query";
-import { orpc } from "$lib/orpc";
+	import { createQuery } from "@tanstack/svelte-query";
+	import { orpc } from "$lib/orpc";
 
-const healthCheck = createQuery(() => orpc.healthCheck.queryOptions());
+	const healthCheck = createQuery(() => orpc.healthCheck.queryOptions());
 </script>
 
 <div class="container mx-auto max-w-3xl px-4 py-2">

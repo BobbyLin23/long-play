@@ -7,11 +7,11 @@
 	],
 	"type": "module",
 	"scripts": {
-		"dev": "turbo run dev",
+		"dev": "turbo run dev --filter=web --filter=server",
 		"build": "turbo run build --filter='!desktop' && turbo run build -F desktop",
 		"check-types": "turbo run check-types",
 		"dev:web": "turbo run dev -F web --",
-		"dev:browser": "turbo run dev --filter='!desktop'",
+		"dev:browser": "turbo run dev --filter='!desktop' --filter='!web'",
 		"dev:desktop": "turbo run dev:hmr -F desktop --",
 		"build:desktop": "turbo run build:stable -F desktop --",
 		"build:desktop:canary": "turbo run build:canary -F desktop --",

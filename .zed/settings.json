@@ -75,16 +75,21 @@
         "source.fixAll.biome": true
       }
     },
-    // --- Languages Biome does not (fully) support -------------------------
-    // Biome's Svelte support is experimental and its formatter is off unless
-    // html.experimentalFullSupportEnabled is enabled in biome.json, so
-    // svelte-language-server (prettier + prettier-plugin-svelte) formats the
-    // whole file. Biome stays attached for lint diagnostics in <script> blocks.
+    // Biome's Svelte formatter is experimental and can drop markup. Use the
+    // Svelte language server for full-file formatting and diagnostics instead.
     "Svelte": {
-    	"format_on_save": "on",
-     	"formatter": { "language_server": { "name": "biome" } },
-      "code_actions_on_format": {
-      	"source.fixAll.biome": true,
+      "format_on_save": "on",
+      "language_servers": [
+        "svelte-language-server",
+        "!biome",
+        "!eslint",
+        "!oxlint",
+        "!oxfmt"
+      ],
+      "formatter": {
+        "language_server": {
+          "name": "svelte-language-server"
+        }
       }
     },
     "HTML": {
@@ -97,6 +102,6 @@
     "YAML": {
       // YAML forbids tabs for indentation.
       "hard_tabs": false
-    },
+    }
   }
 }
