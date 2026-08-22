@@ -1,4 +1,4 @@
-s<script lang="ts">
+<script lang="ts">
 import { useCreatePlaylist, usePlaylistList } from "$lib/api/playlists";
 import { authClient } from "$lib/auth-client";
 import PlaylistCard from "$lib/components/PlaylistCard.svelte";
@@ -105,7 +105,7 @@ $effect(() => {
 					Create your first playlist to collect albums and play them in one place
 				</p>
 				<button
-					class="rounded-full border border-white/20 px-5 py-2 text-sm font-medium text-text-primary transition-colors hover:border-white/50 hover:bg-white/5"
+					class="rounded-full border border-border-strong px-5 py-2 text-sm font-medium text-text-primary transition-colors hover:border-border-strong hover:bg-hover"
 					onclick={openCreate}
 				>＋ New playlist</button
 				>
@@ -133,7 +133,7 @@ $effect(() => {
 				bind:value={name}
 				required
 				maxlength={100}
-				class="w-full rounded-lg border border-white/10 bg-(--color-surface-2) px-3 py-2.5 text-sm outline-none focus:border-accent"
+				class="w-full rounded-lg border border-border bg-bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-accent"
 				placeholder="e.g. Commute picks"
 			/>
 		</div>
@@ -145,7 +145,7 @@ $effect(() => {
 				bind:value={description}
 				maxlength={500}
 				rows={3}
-				class="w-full resize-none rounded-lg border border-white/10 bg-(--color-surface-2) px-3 py-2.5 text-sm outline-none focus:border-accent"
+				class="w-full resize-none rounded-lg border border-border bg-bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-accent"
 				placeholder="A short description…"
 			></textarea>
 		</div>
@@ -157,7 +157,7 @@ $effect(() => {
 		<div class="flex justify-end gap-3 pt-1">
 			<button
 				type="button"
-				class="rounded-full px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+				class="rounded-full px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-hover hover:text-text-primary"
 				onclick={closeCreate}
 			>Cancel</button
 			>

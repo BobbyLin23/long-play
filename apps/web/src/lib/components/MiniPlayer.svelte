@@ -21,7 +21,7 @@ function onSeek(event: Event) {
 </script>
 
 {#if currentTrack}
-	<div class="flex h-16 items-center gap-4 border-t border-white/5 bg-black/60 px-4 backdrop-blur-xl">
+	<div class="flex h-16 items-center gap-4 border-t border-border bg-player px-4 backdrop-blur-xl">
 		{#if currentTrack.coverUrl}
 			<img
 				src={currentTrack.coverUrl}
@@ -53,7 +53,7 @@ function onSeek(event: Event) {
 				aria-label="Playback progress"
 			/>
 			<span>{formatTime(duration)}</span>
-			<span class="ml-1 rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold">
+			<span class="ml-1 rounded bg-overlay px-1.5 py-0.5 text-[10px] font-semibold">
 				{player.index + 1} / {player.queue.length}
 			</span>
 		</div>

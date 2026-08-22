@@ -47,7 +47,7 @@ async function onSubmit(event: SubmitEvent) {
 					bind:value={email}
 					required
 					autocomplete="email"
-					class="w-full rounded-lg border border-white/10 bg-(--color-surface-2) px-3 py-2.5 text-sm outline-none focus:border-accent"
+					class="w-full rounded-lg border border-border bg-bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-accent"
 					placeholder="you@example.com"
 				/>
 			</div>
@@ -59,7 +59,7 @@ async function onSubmit(event: SubmitEvent) {
 					bind:value={password}
 					required
 					autocomplete="current-password"
-					class="w-full rounded-lg border border-white/10 bg-(--color-surface-2) px-3 py-2.5 text-sm outline-none focus:border-accent"
+					class="w-full rounded-lg border border-border bg-bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-accent"
 					placeholder="••••••••"
 				/>
 			</div>

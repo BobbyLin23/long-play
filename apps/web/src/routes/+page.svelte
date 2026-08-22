@@ -62,7 +62,7 @@ const visibleAlbums = $derived.by(() => {
 			{/each}
 		</div>
 	{:else if searchQuery}
-		<div class="rounded-2xl border border-white/8 bg-white/2.5 px-6 py-14 text-center">
+		<div class="rounded-2xl border border-border bg-hover px-6 py-14 text-center">
 			<p class="text-base font-medium">No albums found</p>
 			<p class="mt-1 text-sm text-text-secondary">Try another artist or album name.</p>
 		</div>
