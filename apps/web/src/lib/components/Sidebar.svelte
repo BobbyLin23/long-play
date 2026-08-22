@@ -11,6 +11,7 @@
 	import IconSearch from "@tabler/icons-svelte/icons/search";
 	import { onMount } from "svelte";
 	import { authClient } from "$lib/auth-client";
+	import ModeSwitcher from "$lib/components/ModeSwitcher.svelte";
 
 	const session = authClient.useSession();
 	const sessionUser = $derived($session.data?.user ?? null);
@@ -89,6 +90,11 @@
 		{/if}
 	</nav>
 
+	<div class="appearance">
+		<div class="section-label">Appearance</div>
+		<ModeSwitcher />
+	</div>
+
 	<div class="account" bind:this={accountEl}>
 		{#if sessionPending}
 			<div class="account-loading" aria-label="Loading account">
@@ -150,9 +156,9 @@
 		width: 264px;
 		flex-direction: column;
 		margin: 8px 0 8px 8px;
-		border: 1px solid rgba(255, 255, 255, 0.18);
+		border: 1px solid var(--lp-border-strong);
 		border-radius: 24px;
-		background: #232323;
+		background: var(--lp-sidebar);
 		padding: 22px 14px 14px;
 		color: var(--color-text-primary);
 	}
@@ -192,7 +198,7 @@
 		border: 1px solid transparent;
 		border-radius: 12px;
 		padding: 0 13px;
-		color: #c5c5ca;
+		color: var(--lp-nav);
 		font-size: 15px;
 		font-weight: 520;
 		transition:
@@ -202,12 +208,12 @@
 	}
 
 	.nav-item:hover {
-		background: rgba(255, 255, 255, 0.055);
-		color: #fff;
+		background: var(--lp-hover);
+		color: var(--color-text-primary);
 	}
 
 	.nav-item.active {
-		background: #303030;
+		background: var(--lp-sidebar-active);
 		color: var(--color-accent);
 	}
 
@@ -217,17 +223,22 @@
 
 	.section-label {
 		margin: 0 13px 9px;
-		color: #74747d;
+		color: var(--lp-nav-muted);
 		font-size: 11px;
 		font-weight: 700;
 		letter-spacing: 0.11em;
 		text-transform: uppercase;
 	}
 
+	.appearance {
+		margin-top: 12px;
+		padding-top: 4px;
+	}
+
 	.account {
 		position: relative;
 		margin-top: 12px;
-		border-top: 1px solid rgba(255, 255, 255, 0.07);
+		border-top: 1px solid var(--lp-border);
 		padding-top: 13px;
 	}
 
@@ -279,7 +290,7 @@
 
 	.user-button:hover,
 	.user-button[aria-expanded="true"] {
-		background: rgba(255, 255, 255, 0.065);
+		background: var(--lp-hover);
 	}
 
 	.avatar {
@@ -341,16 +352,16 @@
 		left: 0;
 		z-index: 20;
 		overflow: hidden;
-		border: 1px solid rgba(255, 255, 255, 0.1);
+		border: 1px solid var(--lp-border);
 		border-radius: 14px;
-		background: #252528;
+		background: var(--color-bg-surface);
 		padding: 6px;
-		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.42);
+		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
 	}
 
 	.user-menu-header {
 		margin: 2px 4px 6px;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+		border-bottom: 1px solid var(--lp-border);
 		padding: 7px 8px 11px;
 	}
 
@@ -380,15 +391,15 @@
 		gap: 10px;
 		border-radius: 9px;
 		padding: 9px 8px;
-		color: #d8d8dd;
+		color: var(--color-text-primary);
 		font-size: 13px;
 		text-align: left;
 	}
 
 	.user-menu a:hover,
 	.user-menu button:hover {
-		background: rgba(255, 255, 255, 0.07);
-		color: white;
+		background: var(--lp-hover);
+		color: var(--color-text-primary);
 	}
 
 	@keyframes spin {

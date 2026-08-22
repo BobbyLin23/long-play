@@ -4,15 +4,18 @@ import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 import "../app.css";
 import { onMount } from "svelte";
 import MiniPlayer from "$lib/components/MiniPlayer.svelte";
+import ModeSwitcher from "$lib/components/ModeSwitcher.svelte";
 import NowPlaying from "$lib/components/NowPlaying.svelte";
 import Sidebar from "$lib/components/Sidebar.svelte";
 import { queryClient } from "$lib/orpc";
 import { initPlayer, player } from "$lib/player/player.svelte";
+import { theme } from "$lib/theme.svelte";
 
 const { children } = $props();
 let nowPlayingOpen = $state(false);
 
 onMount(() => {
+	theme.init();
 	initPlayer();
 
 	const isTyping = (el: EventTarget | null) => {
@@ -55,6 +58,11 @@ onMount(() => {
 			</div>
 
 			<main class="flex-1 overflow-y-auto">
+				<div class="flex justify-end px-4 pt-4 md:hidden">
+					<div class="w-36">
+						<ModeSwitcher />
+					</div>
+				</div>
 				{@render children()}
 			</main>
 		</div>
@@ -77,7 +85,7 @@ onMount(() => {
 			aria-label="Now playing"
 		>
 			<button
-				class="fixed right-4 top-4 z-10 rounded-full bg-white/10 px-4 py-2 text-sm hover:bg-white/20"
+				class="fixed right-4 top-4 z-10 rounded-full bg-overlay px-4 py-2 text-sm hover:bg-hover"
 				onclick={() => (nowPlayingOpen = false)}>Close</button
 			>
 			<NowPlaying />

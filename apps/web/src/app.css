@@ -1,16 +1,65 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
 	--color-accent: #fa586a;
 	--color-accent-hover: #e84c5e;
-	--color-bg-base: #0a0a0b;
-	--color-bg-surface: #161618;
-	--color-bg-surface-2: #1f1f22;
-	--color-text-primary: #f5f5f7;
-	--color-text-secondary: #a1a1a8;
+	--color-bg-base: var(--lp-bg-base);
+	--color-bg-surface: var(--lp-bg-surface);
+	--color-bg-surface-2: var(--lp-bg-surface-2);
+	--color-surface-2: var(--lp-bg-surface-2);
+	--color-text-primary: var(--lp-text-primary);
+	--color-text-secondary: var(--lp-text-secondary);
+	--color-border: var(--lp-border);
+	--color-border-strong: var(--lp-border-strong);
+	--color-hover: var(--lp-hover);
+	--color-overlay: var(--lp-overlay);
+	--color-player: var(--lp-player);
 	--font-sans:
 		-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
 		system-ui, "Helvetica Neue", Arial, sans-serif;
+}
+
+:root,
+:root.dark {
+	--lp-bg-base: #0a0a0b;
+	--lp-bg-surface: #161618;
+	--lp-bg-surface-2: #1f1f22;
+	--lp-text-primary: #f5f5f7;
+	--lp-text-secondary: #a1a1a8;
+	--lp-border: rgba(255, 255, 255, 0.08);
+	--lp-border-strong: rgba(255, 255, 255, 0.2);
+	--lp-hover: rgba(255, 255, 255, 0.055);
+	--lp-overlay: rgba(255, 255, 255, 0.1);
+	--lp-player: rgba(0, 0, 0, 0.6);
+	--lp-sidebar: #232323;
+	--lp-sidebar-active: #303030;
+	--lp-nav: #c5c5ca;
+	--lp-nav-muted: #74747d;
+	--lp-scrollbar: rgba(255, 255, 255, 0.15);
+	--color-surface-2: var(--lp-bg-surface-2);
+	color-scheme: dark;
+}
+
+:root.light {
+	--lp-bg-base: #f4f4f6;
+	--lp-bg-surface: #ffffff;
+	--lp-bg-surface-2: #ececee;
+	--lp-text-primary: #1d1d1f;
+	--lp-text-secondary: #6e6e73;
+	--lp-border: rgba(0, 0, 0, 0.08);
+	--lp-border-strong: rgba(0, 0, 0, 0.16);
+	--lp-hover: rgba(0, 0, 0, 0.045);
+	--lp-overlay: rgba(0, 0, 0, 0.08);
+	--lp-player: rgba(255, 255, 255, 0.78);
+	--lp-sidebar: #ffffff;
+	--lp-sidebar-active: #f0f0f2;
+	--lp-nav: #3a3a3c;
+	--lp-nav-muted: #8e8e93;
+	--lp-scrollbar: rgba(0, 0, 0, 0.22);
+	--color-surface-2: var(--lp-bg-surface-2);
+	color-scheme: light;
 }
 
 html,
@@ -28,7 +77,7 @@ body {
 /* Hide native scrollbars for a cleaner music-app look */
 * {
 	scrollbar-width: thin;
-	scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+	scrollbar-color: var(--lp-scrollbar) transparent;
 }
 
 /* Focus ring */

@@ -55,7 +55,7 @@ function onSeek(event: Event) {
 
 		<div class="w-full max-w-lg">
 			{#if atAlbumEnd}
-				<div class="mb-3 flex flex-col items-center gap-2 rounded-lg bg-white/5 py-4">
+				<div class="mb-3 flex flex-col items-center gap-2 rounded-lg bg-hover py-4">
 					<span class="text-sm text-[var(--color-text-secondary)]">Album finished</span>
 					<button
 						class="rounded-full bg-[var(--color-accent)] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"

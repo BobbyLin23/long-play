@@ -151,12 +151,12 @@ function onRemove(albumId: string) {
 			</div>
 			<div class="flex shrink-0 items-center gap-3">
 				<button
-					class="rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:border-white/50 hover:bg-white/5"
+					class="rounded-full border border-border-strong px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:border-border-strong hover:bg-hover"
 					onclick={openEdit}
 				>Edit</button
 				>
 				<button
-					class="rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:border-red-400/60 hover:bg-red-500/10 hover:text-red-400"
+					class="rounded-full border border-border-strong px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:border-red-400/60 hover:bg-red-500/10 hover:text-red-400"
 					onclick={openDelete}
 				>Delete playlist</button
 				>
@@ -226,7 +226,7 @@ function onRemove(albumId: string) {
 				bind:value={editName}
 				required
 				maxlength={100}
-				class="w-full rounded-lg border border-white/10 bg-(--color-surface-2) px-3 py-2.5 text-sm outline-none focus:border-accent"
+				class="w-full rounded-lg border border-border bg-bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-accent"
 			/>
 		</div>
 
@@ -237,7 +237,7 @@ function onRemove(albumId: string) {
 				bind:value={editDescription}
 				maxlength={500}
 				rows={3}
-				class="w-full resize-none rounded-lg border border-white/10 bg-(--color-surface-2) px-3 py-2.5 text-sm outline-none focus:border-accent"
+				class="w-full resize-none rounded-lg border border-border bg-bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-accent"
 			></textarea>
 		</div>
 
@@ -248,7 +248,7 @@ function onRemove(albumId: string) {
 		<div class="flex justify-end gap-3 pt-1">
 			<button
 				type="button"
-				class="rounded-full px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+				class="rounded-full px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-hover hover:text-text-primary"
 				onclick={closeEdit}
 			>Cancel</button
 			>
@@ -280,7 +280,7 @@ function onRemove(albumId: string) {
 	<div class="flex justify-end gap-3">
 		<button
 			type="button"
-			class="rounded-full px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+			class="rounded-full px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-hover hover:text-text-primary"
 			onclick={() => deleteDialog?.close()}
 		>Cancel</button
 		>

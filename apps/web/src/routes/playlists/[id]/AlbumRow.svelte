@@ -35,7 +35,7 @@ $effect(() => {
 });
 </script>
 
-<div class="group flex items-center gap-4 rounded-lg px-3 py-2.5 transition-colors hover:bg-white/5">
+<div class="group flex items-center gap-4 rounded-lg px-3 py-2.5 transition-colors hover:bg-hover">
 	<a
 		href={`/album/${album.id}`}
 		class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md bg-(--color-surface-2)"
@@ -58,7 +58,7 @@ $effect(() => {
 		</div>
 	</div>
 	<button
-		class="rounded-full border border-white/20 px-3 py-1 text-xs text-text-secondary opacity-100 transition-colors hover:border-red-400/60 hover:bg-red-500/10 hover:text-red-400 md:opacity-0 md:group-hover:opacity-100"
+		class="rounded-full border border-border-strong px-3 py-1 text-xs text-text-secondary opacity-100 transition-colors hover:border-red-400/60 hover:bg-red-500/10 hover:text-red-400 md:opacity-0 md:group-hover:opacity-100"
 		onclick={() => onRemove(album.id)}
 		aria-label={`Remove ${album.title} from playlist`}
 	>Remove</button

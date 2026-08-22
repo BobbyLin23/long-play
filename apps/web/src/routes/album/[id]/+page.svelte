@@ -59,7 +59,7 @@ const isPlaying = $derived(player.isPlaying);
 				{isCurrentAlbum && isPlaying ? "Pause" : "Play album"}
 			</button>
 			<button
-				class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-medium text-text-primary transition-colors hover:border-white/50"
+				class="rounded-full border border-border-strong px-6 py-2.5 text-sm font-medium text-text-primary transition-colors hover:border-border-strong hover:bg-hover"
 				onclick={() => player.toggleShuffle()}
 				aria-pressed={player.shuffle}
 			>Shuffle</button
