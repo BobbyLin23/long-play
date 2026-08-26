@@ -1,4 +1,4 @@
-import { db } from "@long-play/db";
+import type { Database } from "@long-play/db";
 import { albums, playlistItems, playlists } from "@long-play/db/schema/music";
 import { ORPCError } from "@orpc/server";
 import { and, asc, count, desc, eq } from "drizzle-orm";
@@ -27,7 +27,11 @@ const albumSummary = {
 	coverUrl: albums.coverUrl,
 };
 
-const requireOwner = async (playlistId: string, userId: string) => {
+const requireOwner = async (
+	db: Database,
+	playlistId: string,
+	userId: string,
+) => {
 	const [row] = await db
 		.select({ id: playlists.id })
 		.from(playlists)
@@ -39,6 +43,7 @@ const requireOwner = async (playlistId: string, userId: string) => {
 };
 
 export const playlistList = protectedProcedure.handler(async ({ context }) => {
+	const { db } = context;
 	const userId = context.session!.user.id;
 	const rows = await db
 		.select({
@@ -61,6 +66,7 @@ const playlistCreateInput = z.object({
 export const playlistCreate = protectedProcedure
 	.input(playlistCreateInput)
 	.handler(async ({ input, context }) => {
+		const { db } = context;
 		const userId = context.session!.user.id;
 		const [row] = await db
 			.insert(playlists)
@@ -74,8 +80,9 @@ const playlistIdInput = z.object({ id: z.string().uuid() });
 export const playlistDetail = protectedProcedure
 	.input(playlistIdInput)
 	.handler(async ({ input, context }) => {
+		const { db } = context;
 		const userId = context.session!.user.id;
-		await requireOwner(input.id, userId);
+		await requireOwner(db, input.id, userId);
 		const [playlist] = await db
 			.select(playlistSummary)
 			.from(playlists)
@@ -108,8 +115,9 @@ export const playlistRename = protectedProcedure
 		}),
 	)
 	.handler(async ({ input, context }) => {
+		const { db } = context;
 		const userId = context.session!.user.id;
-		await requireOwner(input.id, userId);
+		await requireOwner(db, input.id, userId);
 		const [row] = await db
 			.update(playlists)
 			.set({ name: input.name, description: input.description })
@@ -121,8 +129,9 @@ export const playlistRename = protectedProcedure
 export const playlistDelete = protectedProcedure
 	.input(playlistIdInput)
 	.handler(async ({ input, context }) => {
+		const { db } = context;
 		const userId = context.session!.user.id;
-		await requireOwner(input.id, userId);
+		await requireOwner(db, input.id, userId);
 		await db.delete(playlists).where(eq(playlists.id, input.id));
 		return { ok: true };
 	});
@@ -135,8 +144,9 @@ const playlistAddAlbumInput = z.object({
 export const playlistAddAlbum = protectedProcedure
 	.input(playlistAddAlbumInput)
 	.handler(async ({ input, context }) => {
+		const { db } = context;
 		const userId = context.session!.user.id;
-		await requireOwner(input.playlistId, userId);
+		await requireOwner(db, input.playlistId, userId);
 
 		// 校验专辑存在
 		const [album] = await db
@@ -184,8 +194,9 @@ const playlistRemoveAlbumInput = z.object({
 export const playlistRemoveAlbum = protectedProcedure
 	.input(playlistRemoveAlbumInput)
 	.handler(async ({ input, context }) => {
+		const { db } = context;
 		const userId = context.session!.user.id;
-		await requireOwner(input.playlistId, userId);
+		await requireOwner(db, input.playlistId, userId);
 		await db
 			.delete(playlistItems)
 			.where(

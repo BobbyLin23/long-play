@@ -9,7 +9,10 @@
 			"default": "./src/*.ts"
 		}
 	},
-	"scripts": {},
+	"scripts": {
+		"check-types": "tsc --noEmit",
+		"test": "vitest run"
+	},
 	"dependencies": {
 		"@long-play/auth": "workspace:*",
 		"@long-play/db": "workspace:*",
@@ -25,6 +28,7 @@
 	"devDependencies": {
 		"@long-play/config": "workspace:*",
 		"elysia": "catalog:",
-		"typescript": "catalog:"
+		"typescript": "catalog:",
+		"vitest": "^3.2.4"
 	}
 }

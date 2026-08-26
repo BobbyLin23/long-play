@@ -1,4 +1,3 @@
-import { db } from "@long-play/db";
 import { albums, tracks } from "@long-play/db/schema/music";
 import { asc, count, eq } from "drizzle-orm";
 import { z } from "zod";
@@ -26,7 +25,8 @@ const albumListInput = z.object({
 
 export const albumList = publicProcedure
 	.input(albumListInput)
-	.handler(async ({ input }) => {
+	.handler(async ({ input, context }) => {
+		const { db } = context;
 		const rows = await db
 			.select({
 				...albumSummary,
@@ -51,7 +51,8 @@ export const albumList = publicProcedure
 
 export const albumDetail = publicProcedure
 	.input(z.object({ id: z.string().uuid() }))
-	.handler(async ({ input }) => {
+	.handler(async ({ input, context }) => {
+		const { db } = context;
 		const [album] = await db
 			.select(albumSummary)
 			.from(albums)

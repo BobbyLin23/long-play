@@ -22,7 +22,8 @@
 		"db:migrate": "turbo run db:migrate -F @long-play/db --",
 		"deploy": "turbo run deploy -F @long-play/infra --",
 		"destroy": "turbo run destroy -F @long-play/infra --",
-		"check": "biome check --write ."
+		"check": "biome check --write .",
+		"test": "turbo run test"
 	},
 	"dependencies": {
 		"@long-play/env": "workspace:*",

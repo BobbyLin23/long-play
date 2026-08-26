@@ -54,6 +54,10 @@
 		"destroy": {
 			"cache": false,
 			"interactive": true
+		},
+		"test": {
+			"dependsOn": ["^test"],
+			"outputs": []
 		}
 	}
 }
