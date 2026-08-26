@@ -11,7 +11,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dev": "vite dev",
-		"dev:bare": "vite dev"
+		"dev:bare": "vite dev",
+		"test": "vitest run"
 	},
 	"dependencies": {
 		"@long-play/api": "workspace:*",
@@ -39,6 +40,7 @@
 		"svelte-check": "^4.7.4",
 		"tailwindcss": "^4.3.3",
 		"typescript": "catalog:",
-		"vite": "^8.1.5"
+		"vite": "^8.1.5",
+		"vitest": "^3.2.4"
 	}
 }
