@@ -1,3 +1,5 @@
+import type { TasteGenre } from "./genres";
+
 /**
  * 统一的专辑/曲目元数据模型。
  * 目录只到专辑级（产品硬约束：不支持单曲搜索/收藏），
@@ -25,5 +27,7 @@ export type AlbumMeta = {
 	coverUrl: string;
 	/** 上游授权信息（license_ccurl / licenseurl） */
 	license?: string;
+	/** Genre labels (same vocabulary Taste uses) */
+	genres: TasteGenre[];
 	tracks: TrackMeta[];
 };

@@ -35,6 +35,7 @@ export function getSoundHelixAlbums(): AlbumMeta[] {
 			artist: "SoundHelix",
 			coverUrl: "",
 			license: "placeholder (dev only)",
+			genres: [],
 			tracks,
 		};
 	});

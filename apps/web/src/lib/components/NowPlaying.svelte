@@ -1,4 +1,6 @@
 <script lang="ts">
+import LicenseCredit from "$lib/components/LicenseCredit.svelte";
+import { formatLicense } from "$lib/license";
 import { player } from "$lib/player/player.svelte";
 
 const currentTrack = $derived(player.currentTrack);
@@ -8,6 +10,7 @@ const currentTime = $derived(player.currentTime);
 const duration = $derived(player.duration);
 const shuffle = $derived(player.shuffle);
 const repeatMode = $derived(player.repeatMode);
+const licenseLabel = $derived(formatLicense(currentTrack?.license));
 // True when the album has finished: last track has ended
 const atAlbumEnd = $derived(
 	player.queue.length > 0 &&
@@ -51,6 +54,14 @@ function onSeek(event: Event) {
 			<p class="mt-1 truncate text-[var(--color-text-secondary)]">
 				{currentTrack.albumTitle} — {currentTrack.artist}
 			</p>
+			{#if licenseLabel}
+				<p class="mt-1 truncate text-sm text-[var(--color-text-secondary)]">
+					<LicenseCredit
+						license={currentTrack.license}
+						class="underline decoration-border-strong underline-offset-2 hover:text-[var(--color-text-primary)]"
+					/>
+				</p>
+			{/if}
 		</div>
 
 		<div class="w-full max-w-lg">
