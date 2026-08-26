@@ -17,17 +17,20 @@ export function useAlbumDetail(id: string | undefined) {
 	);
 }
 
-export function toPlayableQueue(album: {
+type AlbumQueueSource = {
 	id: string;
 	title: string;
 	artist: string;
 	coverUrl?: string | null;
+	license?: string | null;
 	tracks: Array<{
 		id: string;
 		title: string;
 		durationSec?: number | null;
 	}>;
-}): PlayableTrack[] {
+};
+
+export function toPlayableQueue(album: AlbumQueueSource): PlayableTrack[] {
 	return album.tracks.map((track) => ({
 		trackId: track.id,
 		title: track.title,
@@ -35,22 +38,10 @@ export function toPlayableQueue(album: {
 		albumTitle: album.title,
 		coverUrl: album.coverUrl ?? undefined,
 		durationSec: track.durationSec ?? undefined,
+		license: album.license ?? undefined,
 	}));
 }
 
-export function playAlbum(
-	album: {
-		id: string;
-		title: string;
-		artist: string;
-		coverUrl?: string | null;
-		tracks: Array<{
-			id: string;
-			title: string;
-			durationSec?: number | null;
-		}>;
-	},
-	startIndex = 0,
-): void {
+export function playAlbum(album: AlbumQueueSource, startIndex = 0): void {
 	player.playQueue(toPlayableQueue(album), startIndex);
 }

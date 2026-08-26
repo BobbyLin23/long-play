@@ -1,5 +1,5 @@
 import { albums, tracks } from "@long-play/db/schema/music";
-import { asc, count, eq } from "drizzle-orm";
+import { and, asc, count, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { publicProcedure } from "../index";
@@ -18,6 +18,8 @@ const albumSummary = {
 	coverUrl: albums.coverUrl,
 };
 
+const onShelf = eq(albums.source, "jamendo");
+
 const albumListInput = z.object({
 	cursor: z.number().int().nonnegative().default(0),
 	limit: z.number().int().positive().max(50).default(24),
@@ -34,12 +36,14 @@ export const albumList = publicProcedure
 			})
 			.from(albums)
 			.leftJoin(tracks, eq(tracks.albumId, albums.id))
+			.where(onShelf)
 			.groupBy(albums.id)
 			.orderBy(asc(albums.title))
 			.limit(input.limit)
 			.offset(input.cursor);
 
-		const total = (await db.select({ n: count() }).from(albums))[0]?.n ?? 0;
+		const total =
+			(await db.select({ n: count() }).from(albums).where(onShelf))[0]?.n ?? 0;
 
 		return {
 			albums: rows,
@@ -54,9 +58,13 @@ export const albumDetail = publicProcedure
 	.handler(async ({ input, context }) => {
 		const { db } = context;
 		const [album] = await db
-			.select(albumSummary)
+			.select({
+				...albumSummary,
+				license: albums.license,
+				genres: albums.genres,
+			})
 			.from(albums)
-			.where(eq(albums.id, input.id))
+			.where(and(eq(albums.id, input.id), onShelf))
 			.limit(1);
 		if (!album) {
 			throw new Error("Album not found");

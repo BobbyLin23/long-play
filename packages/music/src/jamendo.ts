@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { genresFromJamendoTags, type TasteGenre } from "./genres";
 import type { AlbumMeta, TrackMeta } from "./types";
 
 const JAMENDO_BASE = "https://api.jamendo.com/v3.0";
@@ -24,6 +25,23 @@ const jamendoAlbumSchema = z.object({
 
 const jamendoResponseSchema = z.object({
 	results: z.array(jamendoAlbumSchema),
+});
+
+const jamendoTaggedTrackSchema = z.object({
+	album_id: z.coerce.string(),
+	musicinfo: z
+		.object({
+			tags: z
+				.object({
+					genres: z.array(z.string()).optional(),
+				})
+				.optional(),
+		})
+		.optional(),
+});
+
+const jamendoTracksResponseSchema = z.object({
+	results: z.array(jamendoTaggedTrackSchema),
 });
 
 export type JamendoClientOptions = {
@@ -52,19 +70,51 @@ export function createJamendoClient(options: JamendoClientOptions) {
 			url.searchParams.set("search", params.search);
 		}
 
+		const data = await fetchJson(url, jamendoResponseSchema);
+		const genreByAlbum = await getAlbumGenres(
+			data.results.map((album) => String(album.id)),
+		);
+		return data.results.map((album) =>
+			toAlbumMeta(album, genreByAlbum.get(String(album.id)) ?? []),
+		);
+	}
+
+	async function fetchJson<T>(url: URL, schema: z.ZodType<T>): Promise<T> {
 		const res = await fetchImpl(url);
 		if (!res.ok) {
 			throw new Error(`Jamendo API error: ${res.status} ${res.statusText}`);
 		}
+		return schema.parse(await res.json());
+	}
 
-		const data = jamendoResponseSchema.parse(await res.json());
-		return data.results.map(toAlbumMeta);
+	async function getAlbumGenres(
+		albumIds: string[],
+	): Promise<Map<string, TasteGenre[]>> {
+		const entries = await Promise.all(
+			albumIds.map(async (albumId) => {
+				const url = new URL(`${JAMENDO_BASE}/tracks/`);
+				url.searchParams.set("client_id", clientId);
+				url.searchParams.set("format", "json");
+				url.searchParams.set("include", "musicinfo");
+				url.searchParams.set("limit", "200");
+				url.searchParams.set("album_id", albumId);
+				const data = await fetchJson(url, jamendoTracksResponseSchema);
+				const tags = data.results.flatMap(
+					(track) => track.musicinfo?.tags?.genres ?? [],
+				);
+				return [albumId, genresFromJamendoTags(tags)] as const;
+			}),
+		);
+		return new Map(entries);
 	}
 
 	return { getAlbums };
 }
 
-function toAlbumMeta(album: z.infer<typeof jamendoAlbumSchema>): AlbumMeta {
+function toAlbumMeta(
+	album: z.infer<typeof jamendoAlbumSchema>,
+	genres: TasteGenre[],
+): AlbumMeta {
 	const tracks: TrackMeta[] = (album.tracks ?? []).map((track, index) => ({
 		title: track.name,
 		position: track.position ?? index + 1,
@@ -83,6 +133,7 @@ function toAlbumMeta(album: z.infer<typeof jamendoAlbumSchema>): AlbumMeta {
 			: undefined,
 		coverUrl: album.image ?? "",
 		license: album.tracks?.[0]?.license_ccurl,
+		genres,
 		tracks,
 	};
 }

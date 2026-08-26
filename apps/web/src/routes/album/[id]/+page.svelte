@@ -1,13 +1,16 @@
 <script lang="ts">
 import { page } from "$app/state";
 import { playAlbum, useAlbumDetail } from "$lib/api/albums";
+import LicenseCredit from "$lib/components/LicenseCredit.svelte";
 import TrackList from "$lib/components/TrackList.svelte";
+import { formatLicense } from "$lib/license";
 import { player } from "$lib/player/player.svelte";
 
 const albumId = $derived(page.params.id);
 const albumQuery = useAlbumDetail(albumId);
 const album = $derived(albumQuery.data);
 const isPending = $derived(albumQuery.isPending);
+const licenseLabel = $derived(formatLicense(album?.license));
 
 const isCurrentAlbum = $derived(
 	player.currentTrack?.albumTitle === album?.title && player.queue.length > 0,
@@ -46,6 +49,13 @@ const isPlaying = $derived(player.isPlaying);
 				<div class="text-text-secondary">
 					{album.artist}
 					{#if album.year} · {album.year}{/if} · {album.tracks.length} tracks
+					{#if licenseLabel}
+						·
+						<LicenseCredit
+							license={album.license}
+							class="underline decoration-border-strong underline-offset-2 hover:text-text-primary"
+						/>
+					{/if}
 				</div>
 			</div>
 		</div>

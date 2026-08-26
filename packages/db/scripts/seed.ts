@@ -5,20 +5,14 @@ import { config } from "dotenv";
 config({ path: resolve(process.cwd(), "../../apps/server/.env") });
 config({ path: resolve(process.cwd(), "../../apps/server/.env.local") });
 
-const [
-	{ createJamendoClient, getSoundHelixAlbums },
-	{ db },
-	{ albums, tracks },
-] = await Promise.all([
-	import("@long-play/music"),
-	import("../src"),
-	import("../src/schema/music"),
-]);
+const [{ createJamendoClient }, { db }, { albums, tracks }] = await Promise.all(
+	[import("@long-play/music"), import("../src"), import("../src/schema/music")],
+);
 
 /**
  * 幂等种子脚本：把精选专辑目录写入 DB。
  * - (source, externalId) 唯一 → upsert 幂等，重复执行不产生重复行。
- * - Jamendo 需要 JAMENDO_CLIENT_ID（可选）；无 Key 时只种 SoundHelix 占位专辑。
+ * - Jamendo 需要 JAMENDO_CLIENT_ID；SoundHelix 不写入产品货架。
  * - 音频不落库：streamUrl 存上游 URL，播放期由 Elysia 代理拉流。
  *
  * 用法：pnpm --filter @long-play/db seed
@@ -35,6 +29,7 @@ async function upsertAlbums(
 		year?: number;
 		coverUrl?: string;
 		license?: string;
+		genres?: string[];
 		tracks: Array<{
 			title: string;
 			position: number;
@@ -57,6 +52,7 @@ async function upsertAlbums(
 				year: meta.year,
 				coverUrl: meta.coverUrl,
 				license: meta.license,
+				genres: meta.genres ?? [],
 			})
 			.onConflictDoUpdate({
 				target: [albums.source, albums.externalId],
@@ -66,6 +62,7 @@ async function upsertAlbums(
 					year: meta.year,
 					coverUrl: meta.coverUrl,
 					license: meta.license,
+					genres: meta.genres ?? [],
 				},
 			})
 			.returning({ id: albums.id });
@@ -97,30 +94,23 @@ async function upsertAlbums(
 }
 
 async function main() {
-	// SoundHelix 占位专辑（开发期）
-	const soundhelix = getSoundHelixAlbums();
-	const soundhelixResult = await upsertAlbums(soundhelix);
-	console.log(
-		`[seed] SoundHelix: ${soundhelixResult.albumCount} albums, ${soundhelixResult.trackCount} tracks`,
-	);
-
-	// Jamendo 精选专辑（可选 Key）
 	const clientId = process.env.JAMENDO_CLIENT_ID;
-	if (clientId) {
-		try {
-			const jamendo = createJamendoClient({ clientId });
-			const albumsMeta = await jamendo.getAlbums({
-				limit: JAMENDO_ALBUM_COUNT,
-			});
-			const jamendoResult = await upsertAlbums(albumsMeta);
-			console.log(
-				`[seed] Jamendo: ${jamendoResult.albumCount} albums, ${jamendoResult.trackCount} tracks`,
-			);
-		} catch (error) {
-			console.error("[seed] Jamendo fetch failed, skipping:", error);
-		}
-	} else {
-		console.log("[seed] JAMENDO_CLIENT_ID not set, skipping Jamendo catalog");
+	if (!clientId) {
+		console.log("[seed] JAMENDO_CLIENT_ID not set, shelf stays empty");
+		return;
+	}
+
+	try {
+		const jamendo = createJamendoClient({ clientId });
+		const albumsMeta = await jamendo.getAlbums({
+			limit: JAMENDO_ALBUM_COUNT,
+		});
+		const jamendoResult = await upsertAlbums(albumsMeta);
+		console.log(
+			`[seed] Jamendo: ${jamendoResult.albumCount} albums, ${jamendoResult.trackCount} tracks`,
+		);
+	} catch (error) {
+		console.error("[seed] Jamendo fetch failed, skipping:", error);
 	}
 
 	console.log("[seed] done");

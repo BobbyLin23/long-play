@@ -5,6 +5,7 @@ export type PlayableTrack = {
 	albumTitle?: string;
 	coverUrl?: string;
 	durationSec?: number;
+	license?: string;
 };
 
 export type RepeatMode = "off" | "all";

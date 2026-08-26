@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
 	index,
 	integer,
@@ -32,6 +32,8 @@ export const albums = pgTable(
 		coverUrl: text("cover_url"),
 		/** 上游授权信息（license_ccurl / licenseurl），用于白名单筛选 */
 		license: text("license"),
+		/** Genre labels (same vocabulary Taste uses) */
+		genres: text("genres").array().notNull().default(sql`'{}'`),
 		createdAt: timestamp("created_at", { withTimezone: true })
 			.defaultNow()
 			.notNull(),
