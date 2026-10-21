@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Amp orb resume: fast, idempotent wake-up checks only.
+# Never install dependencies or start services here.
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+missing=()
+command -v node >/dev/null 2>&1 || missing+=("node")
+command -v pnpm >/dev/null 2>&1 || missing+=("pnpm")
+[ -d node_modules ] || missing+=("node_modules")
+
+if ((${#missing[@]})); then
+	echo "[resume] missing: ${missing[*]}; run .agents/setup" >&2
+	exit 1
+fi
+
+echo "[resume] toolchain and dependencies ready"

@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# Amp orb setup: prepare a fresh orb so long-play's toolchain and dependencies
+# are ready before an agent starts. Must stay non-interactive, idempotent, and
+# fast on a warm filesystem (target: well under 2 minutes).
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+step_start=$SECONDS
+step() { printf '\n[setup +%ss] %s\n' "$((SECONDS - step_start))" "$*" >&2; }
+
+SUDO=""
+if [ "$(id -u)" -ne 0 ] && command -v sudo >/dev/null 2>&1; then
+	SUDO="sudo"
+fi
+
+# --- Node.js ---------------------------------------------------------------
+step "checking Node.js"
+if ! command -v node >/dev/null 2>&1; then
+	echo "[setup] Node.js 22+ is required but was not found" >&2
+	exit 1
+fi
+node_major="$(node -p 'process.versions.node.split(".")[0]')"
+if [ "$node_major" -lt 22 ]; then
+	echo "[setup] Node.js 22+ is required (found $(node --version))" >&2
+	exit 1
+fi
+step "Node.js $(node --version)"
+
+# --- pnpm (pinned in package.json packageManager) --------------------------
+step "checking pnpm"
+pnpm_wanted="$(node -p "require('./package.json').packageManager.replace(/^pnpm@/, '')")"
+pnpm_actual="$(pnpm --version 2>/dev/null || true)"
+if [ "$pnpm_actual" != "$pnpm_wanted" ]; then
+	step "activating pnpm $pnpm_wanted (found ${pnpm_actual:-none})"
+	export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+	if command -v corepack >/dev/null 2>&1; then
+		corepack enable >/dev/null 2>&1 || $SUDO corepack enable >/dev/null 2>&1
+		corepack prepare "pnpm@$pnpm_wanted" --activate
+	else
+		npm install -g "pnpm@$pnpm_wanted"
+	fi
+fi
+step "pnpm $(pnpm --version)"
+
+# --- Local placeholder env (real values come from project env) -------------
+# These files are gitignored and only let the app boot and build inside the
+# orb. dotenv does not override variables already present in the environment,
+# so project secrets and service env always win over these placeholders.
+if [ ! -f apps/server/.env ]; then
+	step "writing placeholder apps/server/.env"
+	cat > apps/server/.env <<'EOF'
+# Placeholder written by .agents/setup so the server can boot without secrets.
+# Replace DATABASE_URL with a real Neon Postgres URL to use the database;
+# dotenv never overrides variables already set in the environment.
+DATABASE_URL=postgresql://placeholder:placeholder@localhost:5432/placeholder
+BETTER_AUTH_SECRET=orb-placeholder-secret-change-me-0123456789abcdef
+BETTER_AUTH_URL=http://localhost:5172
+CORS_ORIGIN=http://localhost:5173
+EOF
+fi
+
+if [ ! -f apps/web/.env ]; then
+	step "writing placeholder apps/web/.env"
+	cat > apps/web/.env <<'EOF'
+# Placeholder written by .agents/setup. SvelteKit reads this at dev/build time.
+PUBLIC_SERVER_URL=http://localhost:5172
+EOF
+fi
+
+# --- Workspace dependencies ------------------------------------------------
+step "pnpm install --frozen-lockfile"
+COREPACK_ENABLE_DOWNLOAD_PROMPT=0 pnpm install --frozen-lockfile
+
+# --- Orb-specific agent notes ----------------------------------------------
+amp_notes="$HOME/.config/amp/AGENTS.md"
+notes_marker="<!-- long-play orb setup notes -->"
+if ! grep -Fq "$notes_marker" "$amp_notes" 2>/dev/null; then
+	step "appending orb notes to ~/.config/amp/AGENTS.md"
+	mkdir -p "$(dirname "$amp_notes")"
+	cat >> "$amp_notes" <<'EOF'
+
+<!-- long-play orb setup notes -->
+- `apps/server/.env` and `apps/web/.env` contain placeholder values written by `.agents/setup`; dotenv does not override real environment variables, so project secrets/env win.
+- Postgres is remote Neon (`@neondatabase/serverless`); there is no local database in this orb. `pnpm test` uses in-memory PGlite and needs no `DATABASE_URL`.
+- The root `pnpm build` also packages the Electrobun desktop app (downloads CEF); use `pnpm -F web build` or `pnpm -F server build` unless the desktop target is required.
+- `apps/desktop` `check-types` currently fails inside the electrobun dependency's own types; that failure is upstream, not caused by repository changes.
+EOF
+fi
+
+step "setup complete in $((SECONDS - step_start))s"

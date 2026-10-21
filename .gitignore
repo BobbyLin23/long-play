@@ -47,6 +47,9 @@ lerna-debug.log*
 .alchemy
 .vercel
 
+# Amp orb generated portal state
+.amp/portals/
+
 # Testing
 coverage
 .nyc_output
