@@ -62,3 +62,9 @@ temp
 
 # L2 音频磁盘缓存（临时加速层，不留持久状态）
 .audio-cache
+
+# Verification skill run artifacts + local state
+.cursor/skills/verify-long-play/artifacts/
+.cursor/skills/verify-long-play/.run-state.json
+.cursor/skills/verify-long-play/.browser-daemon*
+.cursor/skills/verify-long-play/node_modules/
