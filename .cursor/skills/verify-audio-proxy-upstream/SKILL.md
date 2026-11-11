@@ -29,7 +29,7 @@ If the change is only L2 disk cache (`audio-cache.ts`) and does not alter how `u
 | Tool | Vitest property tests against the real `audioProxyRoutes` (TypeScript has no in-repo code verifier; generated inputs on the real handler) |
 | Tool version | `vitest@3.2.7` (pinned by this skill's `package.json` / lockfile on first `npm install`) |
 | Covered code | `resolveUpstream`, `audioProxyRoutes` in `apps/server/src/audio-proxy.ts` |
-| Sync commit | `c72595d68d74b0cb30d62d06b2ef291476c474d5` — last commit at which this skill's check was confirmed to describe that file |
+| Sync commit | `53efae7edb4034efd34f1cd43df42f93bc185c85` — last commit at which this skill's check was confirmed to describe that file |
 | Out of scope | Range/206 correctness, L2 cache concurrency/eviction, stale in-process `trackCache` after DB updates, auth on the proxy |
 
 Move **Sync commit** forward only after you re-read `audio-proxy.ts` and confirm the check still describes how `upstreamUrl` is chosen, then re-run the check.
