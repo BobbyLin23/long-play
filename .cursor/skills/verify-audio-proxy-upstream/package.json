@@ -1,0 +1,13 @@
+{
+	"name": "verify-audio-proxy-upstream",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"check": "vitest run --config vitest.config.ts"
+	},
+	"devDependencies": {
+		"elysia": "^1.4.29",
+		"typescript": "^5.9.2",
+		"vitest": "^3.2.4"
+	}
+}
